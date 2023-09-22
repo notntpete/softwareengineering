@@ -27,7 +27,7 @@ app.listen(port);
 
 app.get('/', (req, res) => {
     console.log("get request made");
-    connection.query('SELECT * FROM products', (err, result) =>{
+    connection.query('SELECT PRICE FROM products', (err, result) =>{
         if(err){
             console.error('Error executing query:', err);
             res.status(500).send('Error executing query');
@@ -35,13 +35,13 @@ app.get('/', (req, res) => {
         }
         res.send(result);
     });
+
 });
 
 app.post('/', (req, res) => {
     quantity = req.body;
-    console.log(req.body);
-    let APrice = 0, BPrice = 0, CPrice = 0;
-    /*
+    console.log(quantity);
+    
     connection.query(
         ` SELECT PRICE FROM products`, (err, result) =>{
         if(err){
@@ -53,16 +53,25 @@ app.post('/', (req, res) => {
         console.log(APrice);
         
 
-        const insertQuery = `INSERT INTO order_item(product_id, quantity, total_price) VALUES (?, ?, ?)`
-        const values = [1, quantity.AQuantity, APrice];
+        let insertQuery = `INSERT INTO orders(order_date, total_amount, order_status) VALUES (?, ?, ?)`
+        const values = [new Date(), quantity.totalPrice, "Unpaid"];
+        
+        connection.execute(insertQuery, values);
 
-    connection.execute(insertQuery, values);
+        
+        InsertOrderItem(2, 1, parseFloat(quantity.AQuantity), parseFloat(quantity.APrice), parseFloat(quantity.ATotalPrice));
+
+        
+        
     
-    })  */       
+    
+    })    
 });
 
-function InsertOrderItem(number, quantity, price){
-    
+function InsertOrderItem(order_id, product_id, quantity, price, totalPrice){
+    let insertQuery = `INSERT INTO order_item(order_id, product_id, quantity, item_price, total_price) VALUES (?, ?, ?, ?, ?)`
+    values = [order_id, product_id, quantity, price, totalPrice]
+    connection.execute(insertQuery, values);
 };
 
 app.get('/inventory', (req, res) => {
