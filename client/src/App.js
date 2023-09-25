@@ -1,8 +1,10 @@
 import { BrowserRouter } from 'react-router-dom';
 import {Link, Route, Routes} from "react-router-dom";
 import './App.css';
-import Inventory from './components/inventory'
+import Products from './components/products'
 import SalesOrdering from './components/sales-order'
+import Customer from './components/customer';
+import Inventory from './components/inventory';
 import React, {useState, useEffect} from 'react';
 <script src="https://cdn.tailwindcss.com"></script>
 function App() {
@@ -17,94 +19,12 @@ function App() {
     })  
   }, []);*/
 
-  const [product, newProduct] = useState([]);
-  const [classA, setClassA] = useState('');
-  const [classB, setClassB] = useState('');
-  const [classC, setClassC] = useState('');
-
-  const [weight, setWeight] = useState();
-  const [weightA, setWeightA] = useState(0);
-  const [weightB, setWeightB] = useState(0);
-  const [weightC, setWeightC] = useState(0);
-
-  const[totalPrice, setPrice] = useState();
-  const[priceA, setPriceA] = useState('');
-  const[priceB, setPriceB] = useState('');
-  const[priceC, setPriceC] = useState('');
-
-function emptyChecker(param){
-  if (param != ""){
-    return parseFloat(param)
-  }
-  else{
-    return 0;
-  }
-}
-
-  function addAllA(newValue){
-    setWeight(emptyChecker(newValue) + parseFloat(weightB) + parseFloat(weightC));
-  }
-  function addAllB(newValue){
-    setWeight(parseFloat(weightA) + emptyChecker(newValue) + parseFloat(weightC));
-  }
-  function addAllC(newValue){
-    setWeight(parseFloat(weightA) + parseFloat(weightB) + emptyChecker(newValue));
-  }
-
-  function addAllPriceA(params){
-    setPrice(emptyChecker(params) + emptyChecker(priceB) + emptyChecker(priceC));
-  }
-  function addAllPriceB(params){
-    setPrice(emptyChecker(priceA) + emptyChecker(params) + emptyChecker(priceC));
-  }
-  function addAllPriceC(params){
-    setPrice(emptyChecker(priceA) + emptyChecker(priceB) + emptyChecker(params));
-  }
-
-  const handleInputChangeA = (event) =>{
-    setWeightA(event.target.value);
-    setClassA(event.target.value);
-    addAllA(event.target.value);
-
-    setPriceA(event.target.value * product[0].PRICE)
-    addAllPriceA(event.target.value * product[0].PRICE);
-    }
-  const handleInputChangeB = (event) =>{
-    setClassB(event.target.value);
-    setWeightB(event.target.value)
-    addAllB(event.target.value)
-
-    setPriceB(event.target.value * product[1].PRICE)
-    addAllPriceB(event.target.value * product[1].PRICE)
-  }
-  const handleInputChangeC = (event) =>{
-    setClassC(event.target.value);
-    setWeightC(event.target.value);
-    addAllC(event.target.value);
-
-    setPriceC(event.target.value * product[2].PRICE)
-    addAllPriceC(event.target.value * product[2].PRICE)
-    }
-
 
 
   const handleSubmit = (event) =>{
     let tester = window.confirm("Try to press")
     //create confirmation modal of sales order
-    if(tester == true){
-      event.preventDefault();
-      console.log("submitted");
-      const url = 'http://localhost:4000';
-      fetch(url, {
-          method: 'POST',
-          headers: {
-          'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ AQuantity: classA, BQuantity: classB, CQuantity: classC, totalPrice: totalPrice, ATotalPrice: priceA, BTotalPrice: priceB, CTotalPrice: priceC, APrice: product[0].PRICE, BPrice:product[1].PRICE, CPrice: product[2].PRICE})
-      })
-      .then(response => response.json())
-      .catch(error => console.error(error))
-      }
+   
   }
 
   {/*
@@ -125,9 +45,12 @@ function emptyChecker(param){
 <BrowserRouter>
     <Routes>
      
+      <Route path = "/products" element = {<Products></Products>}></Route>
+      <Route path = "/sales" element = {<SalesOrdering></SalesOrdering>}></Route>
+      <Route path = "/customer" element = {<Customer></Customer>}></Route>
       <Route path = "/inventory" element = {<Inventory></Inventory>}></Route>
-      <Route path = "/" element = {<SalesOrdering></SalesOrdering>}></Route>
     </Routes>
+
 
   
    {/* 

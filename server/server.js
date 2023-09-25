@@ -61,12 +61,16 @@ app.post('/', (req, res) => {
         
         InsertOrderItem(2, 1, parseFloat(quantity.AQuantity), parseFloat(quantity.APrice), parseFloat(quantity.ATotalPrice));
 
-        
-        
-    
-    
     })    
 });
+
+app.post('/sales', (req, res) => {
+    console.log("post request made");
+
+
+
+})
+
 
 function InsertOrderItem(order_id, product_id, quantity, price, totalPrice){
     let insertQuery = `INSERT INTO order_item(order_id, product_id, quantity, item_price, total_price) VALUES (?, ?, ?, ?, ?)`

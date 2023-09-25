@@ -90,7 +90,7 @@ function SalesOrdering(){
         if(tester == true){
           event.preventDefault();
           console.log("submitted");
-          const url = 'http://localhost:4000';
+          const url = 'http://localhost:4000/sales';
           fetch(url, {
               method: 'POST',
               headers: {
@@ -126,16 +126,17 @@ return(
                 <h1 class="">Customer Name:
                     <div class=""><input class="text-black rounded-lg bg-teal-500 h-[20px] w-[550px]"></input></div>
                 </h1>
-                <form>
+            
                 <div class="pl-5 rounded-lg bg-white m-5 h-[350px] p-6">
+                     
                     <div class="m-1 text-left"> <b>Class Type:</b>
-                    
+                    <form onSubmit = {handleSubmit}> </form>
                       <div class="grid grid-cols-3 grid-rows-3">
                         <p class="flex-auto m-2">Class A </p><div class="m-2 ml-[40px]">BOX</div><input value = {classA} onChange ={handleInputChangeA} class="rounded-lg bg-teal-500 h-6 m-2 w-[80px] ml-8"></input>
                         <p class="flex-auto m-2">Class B </p><div class="m-2 ml-[40px]">30/KG</div><input value = {classB} onChange ={handleInputChangeB} class="rounded-lg bg-teal-500 h-6 m-2 w-[80px] ml-8"></input>
                         <p class="flex-auto m-2">Class C </p><div class="m-2 ml-[40px]">40/KG</div><input value = {classC} onChange ={handleInputChangeC} class="rounded-lg bg-teal-500 h-6 m-2 w-[80px] ml-8"></input>
                         </div>
-                   
+                     
                     </div>
                     <button class=" ml-[313px] rounded-full bg-emerald-500 text-center w-[30px] h-8 border-2 border-white pb-[2px] text-black">+</button>
                     <div class="grid grid-cols-2 mt-2 grid-rows-2 rounded-lg bg-emerald-400 h-[1px] gap-1 ">
@@ -144,8 +145,9 @@ return(
                     </div>
                 </div>
                 <button class="delay-150 bg-white border-emerald-500 ml-[10px] border-2 place-content-center p-1 h-9 w-[80px] mt-[20px] mb-5 rounded-lg">Submit</button>
-                </form>
+                
               </div>
+              
           </div>
         </div>
 
