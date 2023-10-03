@@ -71,6 +71,47 @@ app.post('/sales', (req, res) => {
 
 })
 
+app.post('/sacks', (req, res) => {
+    let insertStockQuery = 'INSERT INTO stockin_sack(stockin_sack_date, sack_quantity) VALUES (?, ?)';
+    values = [req.body.date, req.body.sacks];
+    connection.execute(insertStockQuery, values);
+    connection.query(
+        ` SELECT MAX(stockin_sack_id) FROM stockin_sack;`, (err, result) =>{
+        if(err){
+            console.error('Error executing query:', err);
+            res.status(500).send('Error executing query');
+            return;
+        }
+        let insertSackQuery = 'INSERT INTO sack_inventory(sack_quantity, stockin_sack_id) VALUES (?, ?)'
+        newValues = [req.body.sacks, result[0]['MAX(stockin_sack_id)']];
+        connection.execute(insertSackQuery, newValues);
+    })
+})
+
+app.get('/inventory', (req,res) => {
+    const query = 'SELECT * from products'
+
+    connection.query(query, (err,results) => {
+        if(err){
+            console.log("Error");
+            return;
+        }
+
+        const classData = results.map((row) => row.class);
+        const measurementData = results.map((row) => row.measurement_type)
+        const productID = results.map((row) => row.product_id)
+
+        res.json([{classData}, {measurementData}, {productID}]);
+    })
+    
+})
+
+app.post('/inventory', (req, res) => {
+    console.log(req.body);
+
+
+})
+
 
 function InsertOrderItem(order_id, product_id, quantity, price, totalPrice){
     let insertQuery = `INSERT INTO order_item(order_id, product_id, quantity, item_price, total_price) VALUES (?, ?, ?, ?, ?)`

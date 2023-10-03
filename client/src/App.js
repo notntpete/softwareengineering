@@ -5,6 +5,7 @@ import Products from './components/products'
 import SalesOrdering from './components/sales-order'
 import Customer from './components/customer';
 import Inventory from './components/inventory';
+import Sacks from './components/sacks'
 import React, {useState, useEffect} from 'react';
 <script src="https://cdn.tailwindcss.com"></script>
 function App() {
@@ -49,6 +50,7 @@ function App() {
       <Route path = "/sales" element = {<SalesOrdering></SalesOrdering>}></Route>
       <Route path = "/customer" element = {<Customer></Customer>}></Route>
       <Route path = "/inventory" element = {<Inventory></Inventory>}></Route>
+      <Route path = "/sacks" element = {<Sacks></Sacks>}></Route>
     </Routes>
 
 
@@ -97,8 +99,8 @@ function App() {
         </div>
 */}
       </BrowserRouter>
-    </div>
-  
+    </div> 
+
   
   );
   
