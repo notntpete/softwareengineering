@@ -97,18 +97,30 @@ app.get('/inventory', (req,res) => {
             return;
         }
 
-        const classData = results.map((row) => row.class);
-        const measurementData = results.map((row) => row.measurement_type)
-        const productID = results.map((row) => row.product_id)
-
-        res.json([{classData}, {measurementData}, {productID}]);
+        const product = results.map((row) => row)
+        res.json([{product}]);   
+          
     })
+
+
+
+     
     
 })
 
 app.post('/inventory', (req, res) => {
-    console.log(req.body);
+    reqValues = req.body;
+    //console.log(reqValues.products[0].product_id);
 
+    let repackQuery = `INSERT INTO stockin_repack(stockin_date, total_quantity) VALUES (?, ?)`
+    repackValues = [new Date(), req.body.sum]
+    //connection.execute(repackQuery, repackValues); //creates new value for repack_stockin_id
+
+    for(let i = 0; i <= 2; i++){
+        let query = `INSERT INTO repack_inventory(product_id, stock_in_date, stock_quantity, product_price, measurement_type) VALUES(?, ?, ?, ?, ?)`
+        values = [reqValues.products[i].product_id, new Date(), parseFloat(reqValues.inputValues[i]), reqValues.products[i].price, reqValues.products[i].measurement_type]
+        connection.execute(query, values);
+    }
 
 })
 

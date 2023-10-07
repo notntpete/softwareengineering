@@ -6,8 +6,10 @@ function Inventory(){
     const [Class, setClass] = useState([]);
     const [measure, setMeasure] = useState([]);
     const [inputValues, setInputValues] = useState([]);
-    const [productID, setProductID] = useState([]);
+    const [product, setProduct] = useState([]);
+    const [sacks, setSacks] = useState(0);
 
+    let sum = 0
     const resetArrayToZero = () => {
         // Create a new array with all elements set to 0
         const newArray = new Array(inputValues.length).fill('');
@@ -21,14 +23,18 @@ function Inventory(){
         //create confirmation modal of sales order
         if(tester == true){
           event.preventDefault();
-          console.log("submitted");
+        
+        inputValues.forEach(num => {
+            sum += parseFloat(num);
+        })
+
           const url = 'http://localhost:4000/inventory';
           fetch(url, {
               method: 'POST',
               headers: {
               'Content-Type': 'application/json'
               },
-              body: JSON.stringify({inputValues:inputValues})
+              body: JSON.stringify({inputValues:inputValues, sacks: sacks, sum: sum, products: product})
           })
           .then(response => response.json())
           .catch(error => console.error(error))
@@ -39,12 +45,10 @@ function Inventory(){
         fetch('http://localhost:4000/inventory')
         .then(res => {return res.json()})
         .then(data => {
-          setClass(data[0].classData);
-          setMeasure(data[1].measurementData);
-          setProductID(data[2].productID);
-          setInputValues(data[0].classData);
-        
-
+          setClass(data[0].product.map((row) => row.class)); //classes
+          setMeasure(data[0].product.map((row) => row.measurement_type)); //measurement types
+          setInputValues(data[0].product.map((row) => row.class));  //proxy
+          setProduct(data[0].product); //product values
 
         })  
       }, []);
@@ -54,6 +58,10 @@ function Inventory(){
         updatedValues[index] = newValue;
         setInputValues(updatedValues);
       };
+
+      const handleInputSacks = (event) =>{
+        setSacks(event.target.value);
+      }
 
 
       
@@ -83,7 +91,7 @@ function Inventory(){
 
                 
                     <div class="flex flex-col ml-[0px] gap-10 p-5">
-                        <input class = "bg-lime-600 w-24"></input>
+                        <input value = {sacks} onChange = {handleInputSacks} class = "bg-lime-600 w-24"></input>
                     </div>
 
                     <div class="flex flex-col self-center ml-[0px] gap-10 p-5">
