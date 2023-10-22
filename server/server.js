@@ -78,7 +78,6 @@ app.get('/sales' , (req, res) => {
     })
 })
 
-
 app.post('/sales', (req, res) => {
     //console.log(req.body);
     let orderQuery = `INSERT INTO orders(order_date, total_amount, order_status) VALUES (?, ?, ?)`;
@@ -187,14 +186,20 @@ app.post('/inventory', (req, res) => {
     repackValues = [new Date(), req.body.sum]
     connection.execute(repackQuery, repackValues); //creates new value for repack_stockin_id
 
-    for(let i = 0; i <= 2; i++){
-        let query = `INSERT INTO repack_inventory(product_id, stock_in_date, stock_quantity, product_price, measurement_type) VALUES(?, ?, ?, ?, ?)`
-        values = [reqValues.products[i].product_id, new Date(), parseFloat(reqValues.inputValues[i]), reqValues.products[i].price, reqValues.products[i].measurement_type]
-        connection.execute(query, values);
+    let idQuery = `SELECT MAX(stockin_repack_id) FROM stockin_repack`
+    connection.query(idQuery, (err, results) => {
+        for(let i = 0; i <= 2; i++){
+            let query = `INSERT INTO repack_inventory(product_id, stock_in_date, stock_quantity, product_price, measurement_type, stockin_repack_id) VALUES(?, ?, ?, ?, ?, ?)`
+            values = [reqValues.products[i].product_id, new Date(), parseFloat(reqValues.inputValues[i]), reqValues.products[i].price, reqValues.products[i].measurement_type, results[0]['MAX(stockin_repack_id)']]
+            connection.execute(query, values);
+    
+            let productQuery = `UPDATE products SET total_quantity = total_quantity + ${parseFloat(reqValues.inputValues[i])} WHERE product_id = ${reqValues.products[i].product_id}`
+            connection.execute(productQuery);
+        }
 
-        let productQuery = `UPDATE products SET total_quantity = total_quantity + ${parseFloat(reqValues.inputValues[i])} WHERE product_id = ${reqValues.products[i].product_id}`
-        connection.execute(productQuery);
-    }
+    })
+
+    
 
 })
 
@@ -205,13 +210,36 @@ app.get('/products', (req, res) => {
             console.log("Error");
             return;
         }
-    
         res.json(results);
 
+    })
+})
+
+app.post('/products', (req, res) => {
+    updatedPrices = req.body.prices;
+
+    const query = `SELECT product_id, price from products`
+    connection.query(query, (err, results) => {
+        for(let i = 0; i < req.body.prices.length; i++){
+            if(updatedPrices[i] != results[i].price){
+                let updateQuery = `UPDATE products SET price = ${updatedPrices[i]} WHERE product_id = ${results[i].product_id}`;
+                connection.execute(updateQuery);
+            }
+        }
     })
 
 
 })
+
+app.get('/repack', (req, res) => {
+    stockInQuery = `SELECT * FROM stockin_repack`;
+    connection.query(stockInQuery, (err, results) =>{
+
+        console.log(results);
+    })
+
+})
+
 
 
 function InsertOrderItem(order_id, product_id, quantity, price, totalPrice){
@@ -220,9 +248,6 @@ function InsertOrderItem(order_id, product_id, quantity, price, totalPrice){
     connection.execute(insertQuery, values);
 };
 
-app.get('/inventory', (req, res) => {
 
-
-})
 
 

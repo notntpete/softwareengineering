@@ -7,10 +7,10 @@ import Customer from './components/customer';
 import Inventory from './components/inventory';
 import Sacks from './components/sacks'
 import React, {useState, useEffect} from 'react';
-import SalesOrdering1 from './components/SalesOrder';
 import RegisterCustomer from './components/regcus';
 import Orders from './components/orders'
 import RegisterEmployee from './components/regemp';
+import Repack from './components/repack';
 <script src="https://cdn.tailwindcss.com"></script>
 function App() {
 
@@ -58,6 +58,7 @@ function App() {
       <Route path = "/orders" element = {<Orders></Orders>}></Route>
       <Route path = "/registercust" element = {<RegisterCustomer></RegisterCustomer>}></Route>
       <Route path = "/registeremp" element = {<RegisterEmployee></RegisterEmployee>}></Route>
+      <Route path = "/repack" element = {<Repack></Repack>}></Route>
     </Routes>
 
 
