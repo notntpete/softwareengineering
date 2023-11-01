@@ -232,11 +232,70 @@ app.post('/products', (req, res) => {
 })
 
 app.get('/repack', (req, res) => {
-    stockInQuery = `SELECT * FROM stockin_repack`;
-    connection.query(stockInQuery, (err, results) =>{
+    repackQuery = `SELECT * FROM repack_inventory`;
+    
+    let stockin = [];
+    
+    connection.query(repackQuery, (err, results) =>{
+        
+        for(let i = 0 ; i < results.length; i++){
+            
+            if(stockin.includes(results[i].stockin_repack_id) == false){
+                stockin.push(results[i].stockin_repack_id);
+            }
+        }
+        let stockArray = [];
+        let repackArray = [];
+        let response = [];
+        const promises = [];
 
-        console.log(results);
+        for (let j = 0; j < stockin.length; j++) {
+            const stockinQuery = `SELECT * FROM stockin_repack WHERE stockin_repack_id = ${stockin[j]}`;
+            const repackSubQuery = `SELECT * FROM repack_inventory WHERE stockin_repack_id = ${stockin[j]}`
+        
+            const promise = new Promise((resolve, reject) => {
+                connection.query(stockinQuery, (err, results) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        stockArray.push(results[0]);
+                        resolve();
+                    }
+                });
+            });
+
+            const promise2 = new Promise((resolve, reject) => {
+                connection.query(repackSubQuery, (err, results) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        repackArray.push(results);
+                        resolve();
+                    }
+                });
+            });
+        
+            promises.push(promise);
+            promises.push(promise2);
+        }
+
+        Promise.all(promises)
+            .then(() => {
+                response[0] = stockArray;
+                response[1] = repackArray;
+                console.log(repackArray);
+                res.json(response);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+
     })
+    
+
+    
+
+    
 
 })
 
