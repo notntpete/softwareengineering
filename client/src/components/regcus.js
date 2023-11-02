@@ -1,17 +1,61 @@
-import React from 'react'
-import backgroundpom from '../images/bglogopom.jpg';
+  import backgroundpom from '../images/bglogopom.jpg';
+import React, {useState, useEffect} from 'react';
 
 const RegisterCustomer = () => {
-  return (
-//     <div class="relative">
-//   <img
-//     src={backgroundpom}
-//     alt="Your Image"
-//     class="min-h-screen w-screen"
-//   />
-//   <div class="absolute inset-0 bg-green-500 opacity-50z"></div>
 
-// </div>
+  const [lastName, setLastName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [gender, setGender] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [fax, setFax] = useState('');
+  const [billAddress, setBillAddress] = useState('');
+  const [shipAddress, setShipAddress] = useState('');
+
+  const handleSubmit = (event) =>{
+    let tester = window.confirm("Try to press")
+    //create confirmation modal of sales order
+    if(tester == true){
+      event.preventDefault();
+    
+      const url = 'http://localhost:4000/regcus';
+      fetch(url, {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({lastName: lastName, firstName: firstName, phoneNumber: phoneNumber, fax: fax, billAddress: billAddress, shipAddress: shipAddress})
+      })
+      .then(response => response.json())
+      .catch(error => console.error(error))
+      }
+  }
+
+
+
+  const handleInputLast = (event) =>{
+    setLastName(event.target.value);
+  }
+  const handleInputFirst = (event) =>{
+    setFirstName(event.target.value);
+  }
+  const handleInputGender = (event) =>{
+    setGender(event.target.value);
+  }
+  const handleInputPhoneNumber = (event) =>{
+    setPhoneNumber(event.target.value);
+  }
+  const handleInputFax = (event) =>{
+    setFax(event.target.value);
+  }
+  const handleInputBillAddress = (event) =>{
+    setBillAddress(event.target.value);
+  }
+  const handleInputShipAddress = (event) =>{
+    setShipAddress(event.target.value);
+  }
+
+  return (
+
     <div className="flex relative min-h-screen flex-col items-center justify-center bg-cover bg-no-repeat" style={{ backgroundImage: `url(${backgroundpom})` }}>
       <div className="absolute inset-0 bg-green-800 opacity-50 z-0"></div>
         <div className='flex flex-col bg-slate-100 z-10 w-[900px] h-[800px] rounded-lg'>
@@ -22,22 +66,23 @@ const RegisterCustomer = () => {
 
             <div className='flex flex-row h-[900px]'>
                 <div className='flex flex-col  w-1/3 ml-10 items-start gap-4 mt-10'>
-                  <div className='h-6 text-lg font-semibold'>Name: </div>
-                  <div className='h-6 text-lg font-semibold'>Fax: </div>
+                  <div className='h-6 text-lg font-semibold'>Last Name: </div>
+                  <div className='h-6 text-lg font-semibold'>First Name: </div>
+                  <div className='h-6 text-lg font-semibold'>Gender: </div>
                   <div className='h-6 text-lg font-semibold'>Phone Number: </div>
+                  <div className='h-6 text-lg font-semibold'>Fax: </div>
                   <div className='h-6 text-lg font-semibold'>Bill Address: </div>
                   <div className='h-6 text-lg font-semibold'>Ship Address: </div>
-                  <div className='h-6 text-lg font-semibold'>Gender: </div>
-                  <div className='h-6 text-lg font-semibold'>Email: </div>
-                  <div className='h-6 text-lg font-semibold'>Picture: </div>
+
+
 
                   </div>
                 <div className='flex flex-col  w-2/3 items-start gap-4 mt-10'>
-                  <input class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
-                  <input class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
-                  <input class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='number' placeholder='' ></input>
-                  <input class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
-                  <input class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
+
+                  <input value = {lastName} onChange = {handleInputLast}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
+                  <input value = {firstName} onChange = {handleInputFirst}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
+
+
                   <div class="flex flex-row gap-4">
                     <div class="bg-[#CCDA7D] rounded-md w-20 justify-start">
                       <input class="rounded-md bg-[#CCDA7D] mr-1" type='radio' name='gender' id='male'></input>
@@ -52,11 +97,17 @@ const RegisterCustomer = () => {
                       <label for='others'>Others</label>
                     </div>
                   </div>
-                  <input class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
-                  <input class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
+
+                  <input value = {phoneNumber} onChange = {handleInputPhoneNumber} class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
+                  <input value = {fax} onChange = {handleInputFax}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
+                  <input value = {billAddress} onChange = {handleInputBillAddress}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
+                  <input value = {shipAddress} onChange = {handleInputShipAddress} class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
+
+                  
+        
                 </div>
             </div>
-            <div className='flex flex-row justify-end'><button class="delay-150 bg-[#CCDA7D] w-20 mr-52 mb-11 rounded-lg">Submit</button></div>
+            <div className='flex flex-row justify-end'><button onClick = {handleSubmit}class="delay-150 bg-[#CCDA7D] w-32 mr-[350px;] mb-72 rounded-lg">Submit</button></div>
 
         
         </div>

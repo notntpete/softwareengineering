@@ -157,7 +157,7 @@ app.get('/orders', (req, res) =>{
           res.status(500).json({ error: 'Internal Server Error' });
           return;
         }
-        connection.query()
+        
         res.json(results);
         
       });
@@ -189,18 +189,17 @@ app.post('/inventory', (req, res) => {
     let idQuery = `SELECT MAX(stockin_repack_id) FROM stockin_repack`
     connection.query(idQuery, (err, results) => {
         for(let i = 0; i <= 2; i++){
-            let query = `INSERT INTO repack_inventory(product_id, stock_in_date, stock_quantity, product_price, measurement_type, stockin_repack_id) VALUES(?, ?, ?, ?, ?, ?)`
-            values = [reqValues.products[i].product_id, new Date(), parseFloat(reqValues.inputValues[i]), reqValues.products[i].price, reqValues.products[i].measurement_type, results[0]['MAX(stockin_repack_id)']]
+            let query = `INSERT INTO repack_inventory(product_id, stock_in_date, stock_quantity, product_price, measurement_type, stockin_repack_id, expiration_date) VALUES(?, ?, ?, ?, ?, ?, ?)`
+            const today = new Date();
+            today.setDate(today.getDate() + 14);
+
+            values = [reqValues.products[i].product_id, new Date(), parseFloat(reqValues.inputValues[i]), reqValues.products[i].price, reqValues.products[i].measurement_type, results[0]['MAX(stockin_repack_id)'], today]
             connection.execute(query, values);
     
             let productQuery = `UPDATE products SET total_quantity = total_quantity + ${parseFloat(reqValues.inputValues[i])} WHERE product_id = ${reqValues.products[i].product_id}`
             connection.execute(productQuery);
         }
-
     })
-
-    
-
 })
 
 app.get('/products', (req, res) => {
@@ -297,6 +296,12 @@ app.get('/repack', (req, res) => {
 
     
 
+})
+
+app.post('/regcus', (req, res) => {
+    const query = `INSERT INTO customers(last_name, first_name, contact_number, fax_number, ship_address, bill_address) VALUES (?, ?, ?, ?, ?, ?)`
+    values = [req.body.lastName, req.body.firstName, req.body.phoneNumber, req.body.fax, req.body.shipAddress, req.body.billAddress];
+    connection.execute(query, values);
 })
 
 

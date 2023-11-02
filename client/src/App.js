@@ -11,6 +11,9 @@ import RegisterCustomer from './components/regcus';
 import Orders from './components/orders'
 import RegisterEmployee from './components/regemp';
 import Repack from './components/repack';
+import LandingPage from './components/landingpage';
+import LoginCustomer from './components/logincus';
+import LoginEmployee from './components/loginemp';
 <script src="https://cdn.tailwindcss.com"></script>
 function App() {
 
@@ -59,6 +62,11 @@ function App() {
       <Route path = "/registercust" element = {<RegisterCustomer></RegisterCustomer>}></Route>
       <Route path = "/registeremp" element = {<RegisterEmployee></RegisterEmployee>}></Route>
       <Route path = "/repack" element = {<Repack></Repack>}></Route>
+      <Route path = "/landingpage" element = {<LandingPage></LandingPage>}></Route>
+      <Route path='/logincus' element={<LoginCustomer></LoginCustomer>}></Route>
+      <Route path='/loginemp' element={<LoginEmployee></LoginEmployee>}></Route>
+      <Route path='/regcus' element={<RegisterCustomer></RegisterCustomer>}></Route>
+      <Route path='/regemp' element={<RegisterEmployee></RegisterEmployee>}></Route>
     </Routes>
 
 
