@@ -299,11 +299,37 @@ app.get('/repack', (req, res) => {
 })
 
 app.post('/regcus', (req, res) => {
-    const query = `INSERT INTO customers(last_name, first_name, contact_number, fax_number, ship_address, bill_address) VALUES (?, ?, ?, ?, ?, ?)`
-    values = [req.body.lastName, req.body.firstName, req.body.phoneNumber, req.body.fax, req.body.shipAddress, req.body.billAddress];
-    connection.execute(query, values);
+    const query = `INSERT INTO customers(last_name, first_name, contact_number, fax_number, ship_address, bill_address, username, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+    const selectQuery = `SELECT * FROM customers WHERE username = '${req.body.username}'`;
+    values = [req.body.lastName, req.body.firstName, req.body.phoneNumber, req.body.fax, req.body.shipAddress, req.body.billAddress, req.body.username, req.body.password];
+    connection.query(selectQuery, (err, results) => {
+        if (results.length == 0){
+            connection.execute(query, values);
+        }
+    })
 })
 
+app.post('/logincus', (req, res) => {
+    const query = `SELECT * FROM customers WHERE username = '${req.body.username}'`;
+    connection.query(query, (err, results) => {
+        if(results.length != 0){
+            if(results[0].password == req.body.password){
+                res.json({customerID: results[0].customer_id});
+            }
+            else{
+                console.log("password wrong");
+            }
+        }
+    })
+})
+
+app.post('/addProduct', (req, res) => { //needs checking of class name whether it already exists or not
+    insertQuery = `INSERT INTO products(class, price, total_quantity, measurement_type) VALUES (?, ?, ?, ?)`
+    values = [req.body.newName, req.body.newPrice, 0, req.body.newMeasurement]
+    console.log(req.body);
+    connection.execute(insertQuery, values);
+
+})
 
 
 function InsertOrderItem(order_id, product_id, quantity, price, totalPrice){

@@ -3,6 +3,10 @@ import React, {useState, useEffect} from 'react';
 
 const RegisterCustomer = () => {
 
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
   const [lastName, setLastName] = useState('');
   const [firstName, setFirstName] = useState('');
   const [gender, setGender] = useState('');
@@ -23,11 +27,19 @@ const RegisterCustomer = () => {
           headers: {
           'Content-Type': 'application/json'
           },
-          body: JSON.stringify({lastName: lastName, firstName: firstName, phoneNumber: phoneNumber, fax: fax, billAddress: billAddress, shipAddress: shipAddress})
+          body: JSON.stringify({lastName: lastName, firstName: firstName, phoneNumber: phoneNumber, fax: fax, billAddress: billAddress, shipAddress: shipAddress, username: username, password: password})
       })
       .then(response => response.json())
       .catch(error => console.error(error))
       }
+  }
+
+  const handleInputUsername = (event) =>{
+    setUsername(event.target.value);
+  }
+
+  const handleInputPassword = (event) =>{
+    setPassword(event.target.value);
   }
 
 
@@ -66,6 +78,9 @@ const RegisterCustomer = () => {
 
             <div className='flex flex-row h-[900px]'>
                 <div className='flex flex-col  w-1/3 ml-10 items-start gap-4 mt-10'>
+                <div className='h-6 text-lg font-semibold'>Username: </div>
+                <div className='h-6 text-lg font-semibold'>Password: </div>
+                <br></br>
                   <div className='h-6 text-lg font-semibold'>Last Name: </div>
                   <div className='h-6 text-lg font-semibold'>First Name: </div>
                   <div className='h-6 text-lg font-semibold'>Gender: </div>
@@ -78,6 +93,10 @@ const RegisterCustomer = () => {
 
                   </div>
                 <div className='flex flex-col  w-2/3 items-start gap-4 mt-10'>
+
+                  <input value = {username} onChange = {handleInputUsername}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
+                  <input value = {password} onChange = {handleInputPassword}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
+                  <br></br>
 
                   <input value = {lastName} onChange = {handleInputLast}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
                   <input value = {firstName} onChange = {handleInputFirst}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
@@ -107,7 +126,7 @@ const RegisterCustomer = () => {
         
                 </div>
             </div>
-            <div className='flex flex-row justify-end'><button onClick = {handleSubmit}class="delay-150 bg-[#CCDA7D] w-32 mr-[350px;] mb-72 rounded-lg">Submit</button></div>
+            <div className='flex flex-row justify-end'><button onClick = {handleSubmit}class="delay-150 bg-[#CCDA7D] w-32 mr-[350px;] mb-64 rounded-lg">Submit</button></div>
 
         
         </div>

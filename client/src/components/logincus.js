@@ -2,15 +2,40 @@ import React, { useState } from 'react';
 import backgroundpom from '../images/bglogopom.jpg';
 import logo from '../images/logoshebar.png';
 import { Link } from 'react-router-dom';
+import {
+  BrowserRouter, Route, Routes, useNavigate,
+} from 'react-router-dom';
 
 function LoginCustomer() {
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Add your logic for handling form submission here
-  };
+  const handleSubmit = (event) =>{
+    let tester = window.confirm("Try to press")
+    //create confirmation modal of sales order
+    if(tester == true){
+      event.preventDefault();
+      
+
+      const url = 'http://localhost:4000/logincus';
+      fetch(url, {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({username: username, password: password})
+      })
+      .then(response => response.json())
+      .then((data) => {if (data.customerID == 2){
+        console.log(data);
+        window.location.replace('/sales');
+      }})
+      .catch(error => console.error(error))
+      }
+  }
+
+  
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-cover bg-no-repeat" style={{ backgroundImage: `url(${backgroundpom})` }}>
@@ -33,7 +58,7 @@ function LoginCustomer() {
         <div className="mt-10 text-5xl pb-9">Customer Login</div>
         <form onSubmit={handleSubmit}>
           <div className="mb-4 px-11">
-            <label htmlFor="username" className="block text-gray-800 font-semibold">Email</label>
+            <label htmlFor="username" className="block text-gray-800 font-semibold">Email/Username</label>
             <input
               type="username"
               id="username"
