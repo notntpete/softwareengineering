@@ -235,6 +235,11 @@ app.post('/products', (req, res) => {
 
 })
 
+app.delete('/products', (req, res) => {
+    deleteQuery = `UPDATE products SET visibility = 0 WHERE product_id = ${req.body.id}`
+    connection.execute(deleteQuery);
+})
+
 app.get('/repack', (req, res) => {
     repackQuery = `SELECT * FROM repack_inventory`;
     
@@ -345,10 +350,6 @@ app.post('/details', (req, res) => {
 
 }) 
 
-app.post('/deleteProduct', (req, res) => {
-    deleteQuery = `DELETE FROM products WHERE product_id = ${req.body.parameter}`;
-    connection.execute(deleteQuery);
-}) 
 
 app.get('/customer', (req, res) => {
     let query = `SELECT * FROM customers`;
@@ -357,7 +358,6 @@ app.get('/customer', (req, res) => {
     })
 
 })
-
 
 function InsertOrderItem(order_id, product_id, quantity, price, totalPrice){
     let insertQuery = `INSERT INTO order_item(order_id, product_id, quantity, item_price, total_price) VALUES (?, ?, ?, ?, ?)`

@@ -43,6 +43,8 @@ function SalesTransaction(){
       const [measure, setMeasure] = useState([]);
       const [productPrice, setProductPrice] = useState([]);
       const [remainingQuantity, setRemainingQuantity] = useState([]);
+      const [visibility, setVisibility] = useState([]);
+    
     
 
       const [weight, setWeight] = useState();
@@ -79,6 +81,8 @@ function SalesTransaction(){
       setMeasure(data[0].product.map((row) => row.measurement_type)); //measurement types
       setRemainingQuantity(data[0].product.map((row) => row.total_quantity))
       //setInputValues(data[0].product.map((row) => row.class));  //proxy
+      setVisibility(data[0].product.map((row)=> row.visibility));
+
       const newArray = [...data[0].product.map((row) => row.price)];
       for(let i = 0; i < newArray.length; i++){
         newArray[i] = 0
@@ -133,7 +137,7 @@ function SalesTransaction(){
         <Sidebar></Sidebar>
         <div className=' w-screen min-h-screen flex flex-col ml-[500px] mt-[125px] items-start'>
           
-          <div className='font-bold text-2xl mt-5'>Sales Transaction</div>
+          <div className='font-bold text-2xl mt-2'>Sales Transaction</div>
           
           <div className='flex flex-col w-8/12 shadow-lg'>
             
@@ -147,32 +151,31 @@ function SalesTransaction(){
             </div>
 
             <div className='flex flex-col bg-white border-[1.5px] rounded-b-sm border-t-0 h-[500px] items-center border-black max-h-3/4 gap-[30px] overflow-y-auto'>
-              {Class.map((value, index) => {
-                return(
-                <div className='flex flex-row w-full mt-5'>
-                    
-                      {//<input className="ml-[30px] rounded-lg bg-[#3BC4AF] h-6 w-[75px] placeholder-slate-900" placeholder='Search'></input>}
-              }
-                    
-                    <div className='flex-1'>{Class[index]}</div>
-                    <div className='flex-1'>{remainingQuantity[index]}</div>
-                    <div className='flex-1'> P{productPrice[index]}</div>
-                    <div className='flex-1'><input
-                      class = "rounded-md text-center bg-[#3BC4AF] w-32"
-                      key={index}
-                      type="text"
-                      value={inputValues[index]}
-                      onChange={(e) => handleInputChange(index, e.target.value)}
-                          /></div>
-                  
-                  </div>
-                )
+              {visibility.map((value, index) => {
+                if(value == 1){
+                  return(
+                    <div className='flex flex-row w-full mt-5'>
+                        
+                          {//<input className="ml-[30px] rounded-lg bg-[#3BC4AF] h-6 w-[75px] placeholder-slate-900" placeholder='Search'></input>}
+                    }
+                        
+                        <div className='flex-1'>{Class[index]}</div>
+                        <div className='flex-1'>{remainingQuantity[index]}</div>
+                        <div className='flex-1'> P{productPrice[index]}</div>
+                        <div className='flex-1'><input
+                          class = "rounded-md text-center bg-[#3BC4AF] w-32"
+                          key={index}
+                          type="text"
+                          value={inputValues[index]}
+                          onChange={(e) => handleInputChange(index, e.target.value)}
+                              /></div>
+                      
+                      </div>
+                    )
+                }
+                
               })}
-              
-
-            
-              
-
+             
               <div className='flex flex-row w-full '>
                 <div className='flex-1'>
                 </div>

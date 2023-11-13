@@ -10,6 +10,7 @@ function Inventory(){
     const [inputValues, setInputValues] = useState([]);
     const [product, setProduct] = useState([]);
     const [sacks, setSacks] = useState(0);
+    const [visibility, setVisibility] = useState([]);
 
     let sum = 0
     const resetArrayToZero = () => {
@@ -51,6 +52,7 @@ function Inventory(){
           setMeasure(data[0].product.map((row) => row.measurement_type)); //measurement types
           setInputValues(data[0].product.map((row) => 0));  //proxy
           setProduct(data[0].product); //product values
+          setVisibility(data[0].product.map((row)=> row.visibility));
 
         })  
       }, []);
@@ -114,25 +116,27 @@ function Inventory(){
                 
           <div className='flex flex-col bg-white border-[1.5px] rounded-b-sm border-t-0 h-[500px] items-center border-black max-h-3/4 gap-[30px] overflow-y-auto'>
 
-{Class.map((value, index) => {
-return(
-<div key={index} className="flex flex-row w-full mt-5">
-  
-<input value = {sacks} onChange = {handleInputSacks} class = "bg-lime-600 w-16"></input>
-  <div className="flex-1">{Class[index]}</div>
-  <div className="flex-1">{measure[index]}</div>
-
-  <input
-                    class = "rounded-md text-center bg-lime-700 w-24"
-                    key={index}
-                    type="text"
-                    value={inputValues[index]}
-                    onChange={(e) => handleInputChange(index, e.target.value)}
-                        />
-</div>
-)})}
-
-                </div>
+{visibility.map((value, index) => {
+if(value == 1){
+  return(
+    <div key={index} className="flex flex-row w-full mt-5">
+      
+    <input value = {sacks} onChange = {handleInputSacks} class = "bg-lime-600 w-16"></input>
+      <div className="flex-1">{Class[index]}</div>
+      <div className="flex-1">{measure[index]}</div>
+    
+      <input
+                        class = "rounded-md text-center bg-lime-700 w-24"
+                        key={index}
+                        type="text"
+                        value={inputValues[index]}
+                        onChange={(e) => handleInputChange(index, e.target.value)}
+                            />
+    </div>
+    )
+}
+})}
+      </div>
 
                 <button onClick ={handleSubmit} class="delay-150 bg-white border-emerald-500 ml-[400px] border-2 place-content-center p-1 h-9 w-[160px] mt-[24px] rounded-lg">Add Inventory</button>
                 </form>

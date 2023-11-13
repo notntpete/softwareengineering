@@ -50,6 +50,7 @@ function Products() {
     const [type, setType] = useState([]);
     const [measure, setMeasure] = useState([])
     const [id, setID] = useState([]);
+    const [visibility, setVisibility] = useState([]);
 
     const [selectedValue, setSelectedValue] = useState('');
 
@@ -67,6 +68,7 @@ function Products() {
             setQuantity(data.map((row) => row.total_quantity));
             setMeasure(data.map((row) => row.measurement_type))
             setID(data.map((row) => row.product_id));
+            setVisibility(data.map((row)=> row.visibility))
             
             console.log(data);
 
@@ -85,18 +87,15 @@ function Products() {
     setPrice(price);
     setModalOpen(true);
   };
-
   const openCreateModal = () => {
     setNewPrice('');
     setNewMeasurement('');
     setNewPrice('');
     setCreateModalOpen(true);
   };
-
   const closeCreateModal = () => {
     setCreateModalOpen(false);
   };
-
   const handleCreate = (event) => {
     let tester = window.confirm("Try to press")
         //create confirmation modal of sales order
@@ -118,6 +117,26 @@ function Products() {
       closeCreateModal();
     }, 2000);
   };
+
+  const handleDelete = (index) => {
+      let tester = window.confirm("Are you sure you want to delete this product?")
+        //create confirmation modal of sales order
+        if(tester == true){
+          console.log("submitted");
+          const url = 'http://localhost:4000/products';
+          fetch(url, {
+              method: 'DELETE',
+              headers: {
+              'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({id: id[index]})
+          })
+          .then(response => response.json())
+          .catch(error => console.error(error))
+          }
+  }
+
+  
 
   const closeModal = () => {
     setModalOpen(false);
@@ -173,9 +192,10 @@ function Products() {
 
           <div className='flex flex-col bg-white border-[1.5px] rounded-b-sm border-t-0 h-[500px] items-center border-black max-h-3/4 gap-[30px] overflow-y-auto'>
 
-            {type.map((value, index) => {
-            return(
-            <div key={index} className="flex flex-row w-full mt-5">
+            {visibility.map((value, index) => {
+            {if(value == 1){
+              return(
+              <div key={index} className="flex flex-row w-full mt-5">
               <div className="">
                 <button
                   className="ml-6 mt-1 bg-[#F3F3F3] text-black hover:bg-[#3BC4AF] hover:text-white"
@@ -184,17 +204,24 @@ function Products() {
                   <Icon icon="bxs:edit" className="h-6 w-6" />
                 </button>
 
-                <button className="ml-6 mt-1 bg-[#F3F3F3] text-black hover:bg-[#3BC4AF] hover:text-white">
-                  <Icon icon="material-symbols:delete-outline" className='h-6 w-6' />
-                </button>
-              </div>
+                <button onClick = {() => handleDelete(index)} className="ml-6 mt-1 bg-[#F3F3F3] text-black hover:bg-[#3BC4AF] hover:text-white">
+                  <Icon icon="material-symbols:delete-outline" className='h-6 w-6'/> </button>
+
+            </div>
             
               <div className="flex-1">{type[index]}</div>
               <div className="flex-1">{quantity[index]}</div>
               <div className="flex-1">{measure[index]}</div>
               <div className="flex-1">{price[index]}/{measure[index]}</div>
             </div>
-            )})}
+            )}}
+            
+            }
+            
+             
+            
+            )}
+          
             
 
 

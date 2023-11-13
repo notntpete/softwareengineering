@@ -40,6 +40,7 @@ const SalesOrdering1 = () => {
   const [totalAmount, setTotal] = useState([]);
   const [status, setStatus] = useState([]);
   const [orderItem, setOrderItem] = useState([]);
+  const [visibility, setVisibility] = useState([]);
 
   const [id, setID] = useState([]);
 
@@ -82,6 +83,7 @@ const SalesOrdering1 = () => {
               setTotal(data.map((row) => row.total_amount))
               setStatus(data.map((row) => row.order_status))
               setID(data.map((row)=> row.order_id)); 
+              console.log(data);
       
             })
         }, []);
@@ -172,6 +174,8 @@ const SalesOrdering1 = () => {
 
                 <div className="flex flex-row bg-[#D9D9D9] w-[460px] border-[1.4px] rounded-t-sm h-16 justify-center items-center font-bold border-black shadow-md">
             <div className="flex"></div>
+
+            
        
             <div className="flex-1 ml-2">Class</div>
             <div className="flex-1">Quantity Order</div>
