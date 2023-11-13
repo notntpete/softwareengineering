@@ -3,7 +3,7 @@ import {Link, Route, Routes} from "react-router-dom";
 import './App.css';
 import Products from './components/products'
 import SalesOrdering from './components/sales-order'
-import Customer from './components/customer';
+import SalesOrdering1 from './components/salesordering'
 import Inventory from './components/inventory';
 import Sacks from './components/sacks'
 import React, {useState, useEffect} from 'react';
@@ -14,6 +14,10 @@ import Repack from './components/repack';
 import LandingPage from './components/landingpage';
 import LoginCustomer from './components/logincus';
 import LoginEmployee from './components/loginemp';
+import CustomerList from './components/customerlist';
+import SalesTransaction from './components/salestransaction'
+import SacksInventory from './components/SacksInventory';
+
 <script src="https://cdn.tailwindcss.com"></script>
 function App() {
 
@@ -55,7 +59,6 @@ function App() {
      
       <Route path = "/products" element = {<Products></Products>}></Route>
       <Route path = "/sales" element = {<SalesOrdering></SalesOrdering>}></Route>
-      <Route path = "/customer" element = {<Customer></Customer>}></Route>
       <Route path = "/inventory" element = {<Inventory></Inventory>}></Route>
       <Route path = "/sacks" element = {<Sacks></Sacks>}></Route>
       <Route path = "/orders" element = {<Orders></Orders>}></Route>
@@ -67,6 +70,10 @@ function App() {
       <Route path='/loginemp' element={<LoginEmployee></LoginEmployee>}></Route>
       <Route path='/regcus' element={<RegisterCustomer></RegisterCustomer>}></Route>
       <Route path='/regemp' element={<RegisterEmployee></RegisterEmployee>}></Route>
+      <Route path='/customerlist' element={<CustomerList></CustomerList>}></Route>
+      <Route path='/salesordering' element={<SalesOrdering1></SalesOrdering1>}></Route>
+      <Route path='/salestransaction' element={<SalesTransaction></SalesTransaction>}></Route>
+      <Route path='/sacksinventory' element={<SacksInventory></SacksInventory>}></Route>
     </Routes>
 
 

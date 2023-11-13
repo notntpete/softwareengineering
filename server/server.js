@@ -93,11 +93,13 @@ app.post('/sales', (req, res) => {
             return;
         }
         
-        for(let i = 0; i < 3; i++){
+        for(let i = 0; i < req.body.products.length; i++){
             currentProduct = req.body.products[i];
             let query = 'INSERT INTO order_item (order_id, product_id, quantity, item_price, total_price) values (?, ?, ?, ?, ?)' //lacks order_id, total_price, stockout_repack_id
-            let values = [results[0]['MAX(order_id)'], currentProduct.product_id, req.body.quantity[i], currentProduct.price, parseFloat(req.body.quantity[i])* currentProduct.price];
-            connection.execute(query, values); 
+            if(req.body.quantity[i]!= 0){
+                let values = [results[0]['MAX(order_id)'], currentProduct.product_id, req.body.quantity[i], currentProduct.price, parseFloat(req.body.quantity[i])* currentProduct.price];
+                connection.execute(query, values); 
+            
 
             let productQuery = `UPDATE products SET total_quantity = total_quantity - ${req.body.quantity[i]} WHERE product_id = ${currentProduct.product_id} `;
             connection.execute(productQuery); 
@@ -127,6 +129,7 @@ app.post('/sales', (req, res) => {
         let stockoutQuery = `INSERT INTO stockout_repack (stockout_repack_date, stockout_type) VALUES (?, ?)` //needs repack_inventory_id
         stockoutValues = [new Date, 'Sales Order'];
         connection.execute(stockoutQuery, stockoutValues);
+    }
     })
 
     
@@ -180,7 +183,7 @@ app.get('/inventory', (req,res) => {
 
 app.post('/inventory', (req, res) => {
     reqValues = req.body;
-    //console.log(reqValues.products[0].product_id);
+    console.log(reqValues);
 
     let repackQuery = `INSERT INTO stockin_repack(stockin_date, total_quantity) VALUES (?, ?)`
     repackValues = [new Date(), req.body.sum]
@@ -188,7 +191,8 @@ app.post('/inventory', (req, res) => {
 
     let idQuery = `SELECT MAX(stockin_repack_id) FROM stockin_repack`
     connection.query(idQuery, (err, results) => {
-        for(let i = 0; i <= 2; i++){
+        for(let i = 0; i < reqValues.inputValues.length; i++){
+            if(reqValues.inputValues[i] != 0){
             let query = `INSERT INTO repack_inventory(product_id, stock_in_date, stock_quantity, product_price, measurement_type, stockin_repack_id, expiration_date) VALUES(?, ?, ?, ?, ?, ?, ?)`
             const today = new Date();
             today.setDate(today.getDate() + 14);
@@ -198,6 +202,7 @@ app.post('/inventory', (req, res) => {
     
             let productQuery = `UPDATE products SET total_quantity = total_quantity + ${parseFloat(reqValues.inputValues[i])} WHERE product_id = ${reqValues.products[i].product_id}`
             connection.execute(productQuery);
+        }
         }
     })
 })
@@ -328,6 +333,28 @@ app.post('/addProduct', (req, res) => { //needs checking of class name whether i
     values = [req.body.newName, req.body.newPrice, 0, req.body.newMeasurement]
     console.log(req.body);
     connection.execute(insertQuery, values);
+
+})
+
+app.post('/details', (req, res) => {
+    console.log(req.body);
+    let query = `SELECT order_id, item_price, quantity, total_price, class FROM order_item INNER JOIN products ON order_item.product_id = products.product_id WHERE order_id = ${req.body.id}`;
+    connection.query(query, (err, results) => {
+        res.send(results);
+    })
+
+}) 
+
+app.post('/deleteProduct', (req, res) => {
+    deleteQuery = `DELETE FROM products WHERE product_id = ${req.body.parameter}`;
+    connection.execute(deleteQuery);
+}) 
+
+app.get('/customer', (req, res) => {
+    let query = `SELECT * FROM customers`;
+    connection.query(query, (err, results) => {
+        res.send(results);
+    })
 
 })
 

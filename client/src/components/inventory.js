@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Link, Route, Routes} from "react-router-dom";
+import { Icon } from '@iconify/react';
+import Sidebar from './sidebar';
 
 function Inventory(){
 
@@ -47,7 +49,7 @@ function Inventory(){
         .then(data => {
           setClass(data[0].product.map((row) => row.class)); //classes
           setMeasure(data[0].product.map((row) => row.measurement_type)); //measurement types
-          setInputValues(data[0].product.map((row) => row.class));  //proxy
+          setInputValues(data[0].product.map((row) => 0));  //proxy
           setProduct(data[0].product); //product values
 
         })  
@@ -67,71 +69,78 @@ function Inventory(){
       
 
     return(
-        <div class="bg-gray-500 flex">
-            <div class="bg-white h-screen p-5 pt-10 bl-none rounded-r-lg">
-                <div class="rounded-full border-2 bg-emerald-500 h-20 w-20 mb-20 ml-5 mt-10 border-white"></div> 
-                <button class="rounded-lg pr-10 pt-2 pb-2 pl-10 delay-150 bg-white border-emerald-500 border-2 duration-50"> <b>Sales</b></button><br/>
-                <button class="mt-5  rounded-lg pr-6 pt-2 pb-2 pl-6 delay-150 bg-white border-emerald-500 border-2  duration-50"> <b>Employees</b> </button> <br/>
-                <button class="mt-5  rounded-lg pr-6 pt-2 pb-2 pl-6 delay-150 bg-white border-emerald-500 border-2 duration-50"><b>Inventory</b> </button><br/>
-                <button class="mt-5  rounded-lg pr-6 pt-2 pb-2 pl-6 delay-150 bg-white border-emerald-500 border-2 duration-50"><b>Customer</b> </button>
-            </div>
-            
-            <div class="ml-[350px] bg-white m-[50px] h-[620px] w-[600px] rounded-lg mt-[90px] place-content-center">
-                
-                <div class="text-center bg-white flex flex-row gap-16 ml-12 mt-7">
-                    <h1><b>Sacks </b></h1>
-                    <h1><b>Class Type </b></h1>
-                    <h1><b>Measurement Unit</b></h1>
-                    <h1><b>Quantity </b></h1>
-                </div>
+        
+    <div className="w-screen min-h-screen flex">
+    <Sidebar />
+    <div className="w-screen min-h-screen flex flex-col ml-[375px] items-start">
+      <div className="flex flex-row mt-[100px]">
+        <input
+          className="bg-[#D9D9D9] h-[30px] w-[225px] rounded-tl-sm rounded-bl-sm min-w-[50px] border-[1.5px] border-black placeholder:text-black"
+          placeholder=" Search"
+        />
+        <button className="h-[30px] w-[40px] border-l-0 bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black justify-center items-center px-2 hover:bg-[#F3F3F3]">
+          <Icon icon="carbon:search" className="h-5 w-5" />
+        </button>
+      </div>
+      <div className="font-bold text-2xl mt-5">Add Repack Page</div>
+      <div className="flex flex-col w-10/12 mt-5">
+        <div className="flex flex-row justify-end">
+          <Link to="/Sacksinventory">
+            <button className="h-[30px] w-[200px] mr-1 bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3]">
+              Sacks Page
+            </button>
+          </Link>
+          <Link to="/products">
+            <button className="h-[30px] w-[200px] mr-6 bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3]">
+              Products Page
+            </button>
+          </Link>
+          <button className="h-[30px] w-[200px] bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3]">
+            + Add Product
+          </button>
+        </div>
+      </div>
+      <div className="flex flex-col w-10/12 shadow-lg mt-5">
+        <div className="flex flex-row bg-[#D9D9D9] border-[1.4px] rounded-t-sm h-16 justify-center items-center font-bold border-black shadow-md">
+          <div className="flex-1">Sacks</div>
+          <div className="flex-1">Class Type</div>
+          <div className="flex-1">Measurement Type</div>
+        
+          <div className="flex-1"> Add Quantity</div>
+        </div>
                 {//<div class="mt-[20px] ml-[20px] w-[550px] rounded-lg bg-emerald-400 h-[1px]"></div>
 }
         <form>
-                <div class = "flex gap-4 mt-2">
-
                 
-                    <div class="flex flex-col ml-[0px] gap-10 p-5">
-                        <input value = {sacks} onChange = {handleInputSacks} class = "bg-lime-600 w-24"></input>
-                    </div>
+          <div className='flex flex-col bg-white border-[1.5px] rounded-b-sm border-t-0 h-[500px] items-center border-black max-h-3/4 gap-[30px] overflow-y-auto'>
 
-                    <div class="flex flex-col self-center ml-[0px] gap-10 p-5">
-                    {Class.map((value, index) => (
-                    <div key={index}>{value}</div>
-                    ))}
-                    </div>
+{Class.map((value, index) => {
+return(
+<div key={index} className="flex flex-row w-full mt-5">
+  
+<input value = {sacks} onChange = {handleInputSacks} class = "bg-lime-600 w-16"></input>
+  <div className="flex-1">{Class[index]}</div>
+  <div className="flex-1">{measure[index]}</div>
 
-                    <div class = "flex flex-col self-center  gap-10 p-5">
-                        {measure.map((value, index) => (
-                        <div key={index}>{value}</div>
-                        ))}
-                    </div>
-
-                    <div class = "flex flex-col self-center  gap-10 p-5">
-                    {resetArrayToZero}
-                    {inputValues.map((value, index) => (
-                    <input
-                    class = "rounded-md text-center bg-lime-700 w-32"
+  <input
+                    class = "rounded-md text-center bg-lime-700 w-24"
                     key={index}
                     type="text"
-                    value={value}
+                    value={inputValues[index]}
                     onChange={(e) => handleInputChange(index, e.target.value)}
                         />
-                    ))}
-
-                    </div>
-
-                    
-                    
+</div>
+)})}
 
                 </div>
 
-                <button onClick ={handleSubmit} class="delay-150 bg-white border-emerald-500 ml-[400px] border-2 place-content-center p-1 h-9 w-[160px] mt-[100px] rounded-lg">Add Inventory</button>
+                <button onClick ={handleSubmit} class="delay-150 bg-white border-emerald-500 ml-[400px] border-2 place-content-center p-1 h-9 w-[160px] mt-[24px] rounded-lg">Add Inventory</button>
                 </form>
             </div>
             
 
         </div>
-        
+        </div>
     )
 };
 export default Inventory;
