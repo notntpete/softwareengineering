@@ -6,6 +6,9 @@ const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 
+const port = 4000;
+app.listen(port);
+
 const connection = mysql.createConnection({
     host: '127.0.0.1',
     user: 'root',
@@ -22,47 +25,63 @@ const connection = mysql.createConnection({
   });
 
 
-const port = 4000;
-app.listen(port);
+app.get('/customer', (req, res) => {
+    query = `SELECT * FROM customers`
+    connection.query(query, (err, results) => {
+        res.send(results);
+    })
+})
 
-app.get('/', (req, res) => {
-    console.log("get request made");
-    connection.query('SELECT PRICE FROM products', (err, result) =>{
+app.post('/customer', (req, res) => {
+    profileQuery = `SELECT * FROM customers WHERE customer_id = ${req.body.userID}`
+    orderQuery = `SELECT * FROM orders WHERE customer_id = ${req.body.userID}`;
+    connection.query(profileQuery, (err, result1) => {
+        connection.query(orderQuery, (err, result2) => {
+            res.json({profile: result1, orders: result2})
+        })
+    })
+})
+
+app.get('/products', (req, res) => {
+    let query = `SELECT * FROM products`;
+    connection.query(query, (err, results) => {
         if(err){
-            console.error('Error executing query:', err);
-            res.status(500).send('Error executing query');
+            console.log("Error");
             return;
         }
-        res.send(result);
-    });
+        res.json(results);
 
-});
+    })
+})
 
-app.post('/', (req, res) => {
-    quantity = req.body;
-    console.log(quantity);
-    
-    connection.query(
-        ` SELECT PRICE FROM products`, (err, result) =>{
-        if(err){
-            console.error('Error executing query:', err);
-            res.status(500).send('Error executing query');
-            return;
+app.post('/products', (req, res) => {
+    updatedPrices = req.body.prices;
+
+    const query = `SELECT product_id, price from products`
+    connection.query(query, (err, results) => {
+        for(let i = 0; i < req.body.prices.length; i++){
+            if(updatedPrices[i] != results[i].price){
+                let updateQuery = `UPDATE products SET price = ${updatedPrices[i]} WHERE product_id = ${results[i].product_id}`;
+                connection.execute(updateQuery);
+            }
         }
-        APrice = parseFloat(result[0].PRICE) * parseFloat(quantity.AQuantity);
-        console.log(APrice);
-        
+    })
 
-        let insertQuery = `INSERT INTO orders(order_date, total_amount, order_status) VALUES (?, ?, ?)`
-        const values = [new Date(), quantity.totalPrice, "Unpaid"];
-        
-        connection.execute(insertQuery, values);
 
-        
-        InsertOrderItem(2, 1, parseFloat(quantity.AQuantity), parseFloat(quantity.APrice), parseFloat(quantity.ATotalPrice));
+})
 
-    })    
-});
+app.delete('/products', (req, res) => {
+    deleteQuery = `UPDATE products SET visibility = 0 WHERE product_id = ${req.body.id}`
+    connection.execute(deleteQuery);
+})
+
+app.post('/addProduct', (req, res) => { //needs checking of class name whether it already exists or not
+    insertQuery = `INSERT INTO products(class, price, total_quantity, measurement_type) VALUES (?, ?, ?, ?)`
+    values = [req.body.newName, req.body.newPrice, 0, req.body.newMeasurement]
+    console.log(req.body);
+    connection.execute(insertQuery, values);
+
+})
 
 app.get('/sales' , (req, res) => {
     const query = 'SELECT * from products'
@@ -135,37 +154,6 @@ app.post('/sales', (req, res) => {
     
 })
 
-app.post('/sacks', (req, res) => {
-    let insertStockQuery = 'INSERT INTO stockin_sack(stockin_sack_date, sack_quantity) VALUES (?, ?)';
-    values = [req.body.date, req.body.sacks];
-    connection.execute(insertStockQuery, values);
-    connection.query(`SELECT MAX(stockin_sack_id) FROM stockin_sack;`, (err, result) =>{
-        if(err){
-            console.error('Error executing query:', err);
-            res.status(500).send('Error executing query');
-            return;
-        }
-        let insertSackQuery = 'INSERT INTO sack_inventory(sack_quantity, stockin_sack_id) VALUES (?, ?)'
-        newValues = [req.body.sacks, result[0]['MAX(stockin_sack_id)']];
-        connection.execute(insertSackQuery, newValues);
-    })
-})
-
-app.get('/orders', (req, res) =>{
-    query = 'SELECT order_id, order_date, total_amount, order_status, orders.customer_id, last_name, first_name FROM orders INNER JOIN customers ON orders.customer_id = customers.customer_id';
-    itemQuery = `SELECT * FROM order_item`
-    connection.query(query, (err, results) => {
-        if (err) {
-          console.error('Error executing MySQL query:', err);
-          res.status(500).json({ error: 'Internal Server Error' });
-          return;
-        }
-        console.log(results);
-        res.json(results);
-        
-      });
-})
-
 app.get('/inventory', (req,res) => {
     const query = 'SELECT * from products'
     connection.query(query, (err,results) => {
@@ -207,37 +195,36 @@ app.post('/inventory', (req, res) => {
     })
 })
 
-app.get('/products', (req, res) => {
-    let query = `SELECT * FROM products`;
-    connection.query(query, (err, results) => {
+
+app.post('/sacks', (req, res) => {
+    let insertStockQuery = 'INSERT INTO stockin_sack(stockin_sack_date, sack_quantity) VALUES (?, ?)';
+    values = [req.body.date, req.body.sacks];
+    connection.execute(insertStockQuery, values);
+    connection.query(`SELECT MAX(stockin_sack_id) FROM stockin_sack;`, (err, result) =>{
         if(err){
-            console.log("Error");
+            console.error('Error executing query:', err);
+            res.status(500).send('Error executing query');
             return;
         }
-        res.json(results);
-
+        let insertSackQuery = 'INSERT INTO sack_inventory(sack_quantity, stockin_sack_id) VALUES (?, ?)'
+        newValues = [req.body.sacks, result[0]['MAX(stockin_sack_id)']];
+        connection.execute(insertSackQuery, newValues);
     })
 })
 
-app.post('/products', (req, res) => {
-    updatedPrices = req.body.prices;
-
-    const query = `SELECT product_id, price from products`
+app.get('/orders', (req, res) =>{
+    query = 'SELECT order_id, order_date, total_amount, order_status, orders.customer_id, last_name, first_name FROM orders INNER JOIN customers ON orders.customer_id = customers.customer_id';
+    itemQuery = `SELECT * FROM order_item`
     connection.query(query, (err, results) => {
-        for(let i = 0; i < req.body.prices.length; i++){
-            if(updatedPrices[i] != results[i].price){
-                let updateQuery = `UPDATE products SET price = ${updatedPrices[i]} WHERE product_id = ${results[i].product_id}`;
-                connection.execute(updateQuery);
-            }
+        if (err) {
+          console.error('Error executing MySQL query:', err);
+          res.status(500).json({ error: 'Internal Server Error' });
+          return;
         }
-    })
-
-
-})
-
-app.delete('/products', (req, res) => {
-    deleteQuery = `UPDATE products SET visibility = 0 WHERE product_id = ${req.body.id}`
-    connection.execute(deleteQuery);
+        console.log(results);
+        res.json(results);
+        
+      });
 })
 
 app.get('/repack', (req, res) => {
@@ -298,15 +285,17 @@ app.get('/repack', (req, res) => {
             .catch((error) => {
                 console.error(error);
             });
-
     })
-    
-
-    
-
-    
-
 })
+
+app.post('/details', (req, res) => {
+    console.log(req.body);
+    let query = `SELECT order_id, item_price, quantity, total_price, class FROM order_item INNER JOIN products ON order_item.product_id = products.product_id WHERE order_id = ${req.body.id}`;
+    connection.query(query, (err, results) => {
+        res.send(results);
+    })
+}) 
+
 
 app.post('/regcus', (req, res) => {
     const query = `INSERT INTO customers(last_name, first_name, contact_number, fax_number, ship_address, bill_address, username, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
@@ -353,44 +342,16 @@ app.post('/loginemp' ,(req, res) => {
 
 })
 
-app.post('/addProduct', (req, res) => { //needs checking of class name whether it already exists or not
-    insertQuery = `INSERT INTO products(class, price, total_quantity, measurement_type) VALUES (?, ?, ?, ?)`
-    values = [req.body.newName, req.body.newPrice, 0, req.body.newMeasurement]
+app.post('/verifycustomer', (req, res) => {
     console.log(req.body);
-    connection.execute(insertQuery, values);
+
 
 })
 
-app.post('/details', (req, res) => {
-    console.log(req.body);
-    let query = `SELECT order_id, item_price, quantity, total_price, class FROM order_item INNER JOIN products ON order_item.product_id = products.product_id WHERE order_id = ${req.body.id}`;
-    connection.query(query, (err, results) => {
-        res.send(results);
-    })
-
-}) 
 
 
 
-app.post('/customer', (req, res) => {
-    profileQuery = `SELECT * FROM customers WHERE customer_id = ${req.body.userID}`
-    orderQuery = `SELECT * FROM orders WHERE customer_id = ${req.body.userID}`;
-    connection.query(profileQuery, (err, result1) => {
-        connection.query(orderQuery, (err, result2) => {
-            res.json({profile: result1, orders: result2})
-        })
-    })
 
-
-
-} )
-
-
-function InsertOrderItem(order_id, product_id, quantity, price, totalPrice){
-    let insertQuery = `INSERT INTO order_item(order_id, product_id, quantity, item_price, total_price) VALUES (?, ?, ?, ?, ?)`
-    values = [order_id, product_id, quantity, price, totalPrice]
-    connection.execute(insertQuery, values);
-};
 
 
 
