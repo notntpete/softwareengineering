@@ -20,10 +20,7 @@ const CustomerList = () => {
         setFirstName(data.map((row) => row.first_name));
         setContactNumber(data.map((row) => row.contact_number))
         setStatus(data.map((row) => row.verified))
-        
 
-
-        
     })
 }, [])
 

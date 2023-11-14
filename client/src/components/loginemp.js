@@ -4,13 +4,35 @@ import { Link } from 'react-router-dom';
 import logo from '../images/logoshebar.png';
 
 function LoginEmployee() {
+
+  const handleSubmit = (event) =>{
+    let tester = window.confirm("Try to press")
+    //create confirmation modal of sales order
+    if(tester == true){
+      event.preventDefault();
+      console.log(username);
+      const url = 'http://localhost:4000/loginemp';
+      fetch(url, {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({username: username, password: password})
+      })
+      .then(response => response.json())
+      .then((data) => {{
+        //localStorage.setItem("customerID", data.customerID)
+        console.log(localStorage);
+        window.location.replace('/adminsalestransaction');
+      }})
+      .catch(error => console.error(error))
+      }
+  }
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Add your logic for handling form submission here
-  };
+
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-cover bg-no-repeat" style={{ backgroundImage: `url(${backgroundpom})` }}>
@@ -30,7 +52,12 @@ function LoginEmployee() {
       <div className='bg-green w-28 h-7 z-50'></div>
 
       <div className="m-16 mt-16 h-96 w-[750px] rounded-lg bg-white  font-bold text-black opacity-90 shadow-lg z-40">
-        <div className="mt-10 text-5xl pb-9">Employee Login</div>
+      <Link to="/">
+        <button className="mt-2 rounded-lg pl-4 pr-4 delay-50 mr-[630px] bg-white border-emerald-500 border-2 duration-50 hover:bg-emerald-500 hover:text-white">
+          Go Back
+        </button>
+      </Link>
+        <div className="text-5xl pb-9">Employee Login</div>
         <form onSubmit={handleSubmit}>
           <div className="mb-4 px-11">
             <label htmlFor="username" className="block text-gray-800 font-semibold">Email</label>

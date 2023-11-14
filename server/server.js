@@ -335,6 +335,24 @@ app.post('/logincus', (req, res) => {
     })
 })
 
+app.post('/loginemp' ,(req, res) => {
+    console.log(req.body);
+    const query = `SELECT * FROM admins WHERE username = '${req.body.username}'`;
+    
+    connection.query(query, (err, results) => {
+        //console.log(results);
+        if(results.length != 0){
+            if(results[0].password == req.body.password){
+                res.json({customerID: results[0].customer_id});
+            }
+            else{
+                console.log("password wrong");
+            }
+        }
+    })
+
+})
+
 app.post('/addProduct', (req, res) => { //needs checking of class name whether it already exists or not
     insertQuery = `INSERT INTO products(class, price, total_quantity, measurement_type) VALUES (?, ?, ?, ?)`
     values = [req.body.newName, req.body.newPrice, 0, req.body.newMeasurement]

@@ -34,7 +34,7 @@ function LoginCustomer() {
       .then((data) => {{
         localStorage.setItem("customerID", data.customerID)
         console.log(localStorage);
-        //window.location.replace('/customersalestransaction');
+        window.location.replace('/customersalestransaction');
       }})
       .catch(error => console.error(error))
       }
@@ -60,7 +60,12 @@ function LoginCustomer() {
       <div className='bg-green w-28 h-7 z-50'></div>
 
       <div className="m-16 mt-16 h-96 w-[750px] rounded-lg bg-white  font-bold text-black opacity-90 shadow-lg z-40">
-        <div className="mt-10 text-5xl pb-9">Customer Login</div>
+      <Link to="/">
+        <button className="mt-2 rounded-lg pl-4 pr-4 delay-50 mr-[630px] bg-white border-emerald-500 border-2 duration-50 hover:bg-emerald-500 hover:text-white">
+          Go Back
+        </button>
+      </Link>
+        <div className=" text-5xl pb-9">Customer Login</div>
         <form onSubmit={handleSubmit}>
           <div className="mb-4 px-11">
             <label htmlFor="username" className="block text-gray-800 font-semibold">Email/Username</label>

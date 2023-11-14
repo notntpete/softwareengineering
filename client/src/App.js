@@ -16,7 +16,7 @@ import LoginEmployee from './components/loginemp';
 import CustomerList from './components/admin/customerlist';
 import AdminSalesTransaction from './components/admin/adminsalestransaction'
 import SacksInventory from './components/SacksInventory';
-import SalesTransaction from './components/salestransaction'
+import SalesTransaction from './components/customer/salestransaction'
 import Customer from './components/customer/customer';
 
 import { MyContextProvider } from './components/MyContext';

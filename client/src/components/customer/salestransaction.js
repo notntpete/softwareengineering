@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import {Link, Route, Routes} from "react-router-dom";
-import Sidebar from './sidebar';
+import CustomerSidebar from '../sidebarcust';
 import { Icon } from '@iconify/react';
-import { MyContext } from './MyContext';
+import { MyContext } from '../MyContext';
+import Customer from './customer';
 
 
 const modalStyles = {
@@ -143,7 +144,7 @@ function SalesTransaction(){
 
     return (
         <div className=" w-screen min-h-screen flex">
-        <Sidebar></Sidebar>
+        <CustomerSidebar></CustomerSidebar>
         <div className=' w-screen min-h-screen flex flex-col ml-[500px] mt-[125px] items-start'>
           
           <div className='font-bold text-2xl mt-2'>Sales Transaction</div>

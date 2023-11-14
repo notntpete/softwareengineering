@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
-import Sidebar from '../sidebar';
+import CustomerSidebar from '../sidebarcust';
 import { Icon } from '@iconify/react';
 
 
@@ -39,7 +39,7 @@ function Customer() {
 
   return (
     <div className="w-screen min-h-screen flex">
-      <Sidebar />
+      <CustomerSidebar />
 
       <div className="w-screen min-h-screen flex flex-col ml-[375px] items-start">
         <div className="flex flex-row mt-[50px]">
