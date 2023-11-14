@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import Sidebar from './sidebar';
+import Sidebar from '../sidebar';
 
 const modalStyles = {
   modalContainer: {
@@ -142,8 +142,7 @@ function Products() {
     setModalOpen(false);
   };
 
-  const handleEdit = () => {
-    console.log('Editing product:', quantity, measurementType, price);
+  const handleEdit = (index) => {
     setTimeout(() => {
       closeModal();
     }, 2000);

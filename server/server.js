@@ -79,9 +79,9 @@ app.get('/sales' , (req, res) => {
 })
 
 app.post('/sales', (req, res) => {
-    //console.log(req.body);
-    let orderQuery = `INSERT INTO orders(order_date, total_amount, order_status) VALUES (?, ?, ?)`;
-    let orderValues = [new Date(), req.body.totalPrice, "Pending Approval"];
+    console.log(req.body);
+    let orderQuery = `INSERT INTO orders(order_date, total_amount, order_status, customer_id) VALUES (?, ?, ?, ?)`;
+    let orderValues = [new Date(), req.body.totalPrice, "Pending Approval", req.body.user];
     connection.execute(orderQuery, orderValues);
 
     
@@ -152,7 +152,7 @@ app.post('/sacks', (req, res) => {
 })
 
 app.get('/orders', (req, res) =>{
-    query = 'SELECT * FROM orders'
+    query = 'SELECT order_id, order_date, total_amount, order_status, orders.customer_id, last_name, first_name FROM orders INNER JOIN customers ON orders.customer_id = customers.customer_id';
     itemQuery = `SELECT * FROM order_item`
     connection.query(query, (err, results) => {
         if (err) {
@@ -160,7 +160,7 @@ app.get('/orders', (req, res) =>{
           res.status(500).json({ error: 'Internal Server Error' });
           return;
         }
-        
+        console.log(results);
         res.json(results);
         
       });
@@ -321,7 +321,9 @@ app.post('/regcus', (req, res) => {
 
 app.post('/logincus', (req, res) => {
     const query = `SELECT * FROM customers WHERE username = '${req.body.username}'`;
+    
     connection.query(query, (err, results) => {
+        console.log(results);
         if(results.length != 0){
             if(results[0].password == req.body.password){
                 res.json({customerID: results[0].customer_id});
@@ -351,13 +353,20 @@ app.post('/details', (req, res) => {
 }) 
 
 
-app.get('/customer', (req, res) => {
-    let query = `SELECT * FROM customers`;
-    connection.query(query, (err, results) => {
-        res.send(results);
+
+app.post('/customer', (req, res) => {
+    profileQuery = `SELECT * FROM customers WHERE customer_id = ${req.body.userID}`
+    orderQuery = `SELECT * FROM orders WHERE customer_id = ${req.body.userID}`;
+    connection.query(profileQuery, (err, result1) => {
+        connection.query(orderQuery, (err, result2) => {
+            res.json({profile: result1, orders: result2})
+        })
     })
 
-})
+
+
+} )
+
 
 function InsertOrderItem(order_id, product_id, quantity, price, totalPrice){
     let insertQuery = `INSERT INTO order_item(order_id, product_id, quantity, item_price, total_price) VALUES (?, ?, ?, ?, ?)`

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Link, Route, Routes} from "react-router-dom";
 import { Icon } from '@iconify/react';
-import Sidebar from './sidebar';
+import Sidebar from '../sidebar';
 
 function Inventory(){
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import Sidebar from './sidebar';
+import Sidebar from '../sidebar';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 
@@ -9,6 +9,8 @@ const CustomerList = () => {
   const [firstName, setFirstName] = useState([]);
   const [contactNumber, setContactNumber] = useState([])
 
+  const[status, setStatus]= useState([]);
+
   useEffect(() => {
     fetch('http://localhost:4000/customer')
     .then(res => {return res.json()})
@@ -17,6 +19,8 @@ const CustomerList = () => {
         setLastName(data.map((row) => row.last_name))
         setFirstName(data.map((row) => row.first_name));
         setContactNumber(data.map((row) => row.contact_number))
+        setStatus(data.map((row) => row.verified))
+        
 
 
         
@@ -52,6 +56,7 @@ const CustomerList = () => {
             <div className="flex-1">Last Name</div>
             <div className="flex-1">First Name</div>
             <div className="flex-1">Contact Number</div>
+            <div className = "flex-1"> Status</div>
 
           </div>
 
@@ -64,6 +69,7 @@ const CustomerList = () => {
             <div className="flex-1">{lastName[index]}</div>
             <div className="flex-1">{firstName[index]}</div>
             <div className="flex-1">{contactNumber[index]}</div>
+            <div className="flex-1">{status[index]}</div>
   
             </div>
 

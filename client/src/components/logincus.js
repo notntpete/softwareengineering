@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import backgroundpom from '../images/bglogopom.jpg';
 import logo from '../images/logoshebar.png';
 import { Link } from 'react-router-dom';
 import {
   BrowserRouter, Route, Routes, useNavigate,
 } from 'react-router-dom';
+import { MyContext } from './MyContext';
+
 
 function LoginCustomer() {
-
+  const {sharedData, setSharedData}= useContext(MyContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+
   const handleSubmit = (event) =>{
+    console.log(sharedData);
     let tester = window.confirm("Try to press")
     //create confirmation modal of sales order
     if(tester == true){
@@ -27,20 +31,19 @@ function LoginCustomer() {
           body: JSON.stringify({username: username, password: password})
       })
       .then(response => response.json())
-      .then((data) => {if (data.customerID == 2){
-        console.log(data);
-        window.location.replace('/sales');
+      .then((data) => {{
+        localStorage.setItem("customerID", data.customerID)
+        console.log(localStorage);
+        //window.location.replace('/customersalestransaction');
       }})
       .catch(error => console.error(error))
       }
   }
 
-  
-
   return (
     <div className="flex min-h-screen flex-col items-center bg-cover bg-no-repeat" style={{ backgroundImage: `url(${backgroundpom})` }}>
       <div className="absolute inset-0 bg-lime-600 opacity-10 z-10"></div>
-
+      <div> {sharedData}</div>
       <div className="mt-20 flex h-[200px] w-screen items-center justify-center bg-lime-800 z-30 shadow-2xl">
         <div className="h-[200px] w-[200px] border-white border rounded-full overflow-hidden">
           <img
@@ -51,7 +54,9 @@ function LoginCustomer() {
         </div>
         <div className="p-11 text-6xl text-white">She-gels Sweet <br />Pummelo Trading</div>
       </div>
+
       
+
       <div className='bg-green w-28 h-7 z-50'></div>
 
       <div className="m-16 mt-16 h-96 w-[750px] rounded-lg bg-white  font-bold text-black opacity-90 shadow-lg z-40">

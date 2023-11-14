@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import {Link, Route, Routes} from "react-router-dom";
-import Sidebar from './sidebar';
+import Sidebar from '../sidebar';
 import { Icon } from '@iconify/react';
-import { MyContext } from './MyContext';
-
 
 const modalStyles = {
   modalContainer: {
@@ -33,28 +31,25 @@ const modalStyles = {
   },
 };
 
-function SalesTransaction(){
-  const {sharedData, setSharedData}= useContext(MyContext);
-
+function AdminSalesTransaction(){
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productName, setProductName] = useState('');
 
   const [product, setProduct] = useState([]);
       
-  const [inputValues, setInputValues] = useState([]);
-  const [Class, setClass] = useState([]);
-  const [measure, setMeasure] = useState([]);
-  const [productPrice, setProductPrice] = useState([]);
-  const [remainingQuantity, setRemainingQuantity] = useState([]);
-  const [visibility, setVisibility] = useState([]);
+      const [inputValues, setInputValues] = useState([]);
+      const [Class, setClass] = useState([]);
+      const [measure, setMeasure] = useState([]);
+      const [productPrice, setProductPrice] = useState([]);
+      const [remainingQuantity, setRemainingQuantity] = useState([]);
+      const [visibility, setVisibility] = useState([]);
     
     
 
-  const [weight, setWeight] = useState();
-  const[totalPrice, setTotalPrice] = useState();
-  let sum = 0
-
-  const[user, setUser] = useState('')
+      const [weight, setWeight] = useState();
+      const[totalPrice, setTotalPrice] = useState();
+      
+      let sum = 0
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -67,6 +62,7 @@ function SalesTransaction(){
 
   const handleAddProduct = () => {
     // Handle the logic for adding product here
+    console.log('Adding product:', productName);
 
     // Close the modal after a delay (e.g., 2 seconds)
     setTimeout(() => {
@@ -75,7 +71,6 @@ function SalesTransaction(){
   };
 
   useEffect(() => {
-    setUser(localStorage.getItem("customerID"))
     fetch('http://localhost:4000/sales')
     .then(res => {return res.json()})
     .then(data => {
@@ -93,14 +88,9 @@ function SalesTransaction(){
       }
       setInputValues(newArray);
       setProductPrice(data[0].product.map((row) => row.price));
-      
 
     })  
   }, []);
-
-  
-
-  
 
   const resetArrayToZero = () => {
     // Create a new array with all elements set to 0
@@ -132,7 +122,7 @@ function SalesTransaction(){
           headers: {
           'Content-Type': 'application/json'
           },
-          body: JSON.stringify({quantity:inputValues, products:product, totalPrice:totalPrice, user:user})
+          body: JSON.stringify({quantity:inputValues, products:product, totalPrice:totalPrice})
       })
       .then(response => response.json())
       .catch(error => console.error(error))
@@ -251,4 +241,4 @@ function SalesTransaction(){
 
     )
 };
-export default SalesTransaction;
+export default AdminSalesTransaction;

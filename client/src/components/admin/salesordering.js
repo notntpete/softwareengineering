@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import Sidebar from './sidebar';
+import Sidebar from '../sidebar';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 
@@ -52,6 +52,9 @@ const SalesOrdering1 = () => {
   const [itemQuantity, setItemQuantity] = useState([]);
   const [itemTotal, setItemTotal] = useState([]);
 
+  const [lastName, setLastName] = useState([]);
+  const [firstName, setFirstName] = useState([]);
+
 
   const openModal = (index) => {
         const url = 'http://localhost:4000/details';
@@ -77,14 +80,16 @@ const SalesOrdering1 = () => {
           fetch('http://localhost:4000/orders')
             .then((response) => response.json())
             .then((data) => {
-      
+              console.log(data);
               setData(data)
               setDate(data.map((row) => row.order_date));
               setTotal(data.map((row) => row.total_amount))
               setStatus(data.map((row) => row.order_status))
               setID(data.map((row)=> row.order_id)); 
-              console.log(data);
-      
+              setLastName(data.map((row) => row.last_name));
+              setFirstName(data.map((row) => row.first_name))
+
+              
             })
         }, []);
   
@@ -120,7 +125,7 @@ const SalesOrdering1 = () => {
         <div className='font-bold text-2xl mt-5'>Sales Ordering</div>
         <div className='flex flex-col w-10/12'>
           <div className='flex justify-end'>
-            <Link to="/salestransaction">
+            <Link to="/adminsalestransaction">
               <button className='h-[30px] w-[200px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]'>
                 + Create Transaction
               </button>
@@ -149,7 +154,7 @@ const SalesOrdering1 = () => {
               </button>
             </div>
             
-            <div className='flex-1'>Customer</div>
+            <div className='flex-1'>{lastName[index]}, {firstName[index]}</div>
             <div className='flex-1'>{date[index]}</div>
             <div className='flex-1'>P{totalAmount[index]}</div>
             <div className='flex-1'>{status[index]}</div>
