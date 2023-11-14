@@ -119,7 +119,7 @@ function Inventory(){
 {visibility.map((value, index) => {
 if(value == 1){
   return(
-    <div key={index} className="flex flex-row w-full mt-5">
+    <div key={index} className="flex w-full mt-5">
       
     <input value = {sacks} onChange = {handleInputSacks} class = "bg-lime-600 w-16"></input>
       <div className="flex-1">{Class[index]}</div>

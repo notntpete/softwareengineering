@@ -88,10 +88,31 @@ const SalesOrdering1 = () => {
               setID(data.map((row)=> row.order_id)); 
               setLastName(data.map((row) => row.last_name));
               setFirstName(data.map((row) => row.first_name))
-
-              
             })
         }, []);
+
+        const handleStatus = (() => {
+          let tester = window.confirm("Try to press")
+        //create confirmation modal of sales order
+        if(tester == true){
+          event.preventDefault();
+        
+        inputValues.forEach(num => {
+            sum += parseFloat(num);
+        })
+
+          const url = 'http://localhost:4000/inventory';
+          fetch(url, {
+              method: 'POST',
+              headers: {
+              'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({inputValues:inputValues, sacks: sacks, sum: sum, products: product})
+          })
+          .then(response => response.json())
+          .catch(error => console.error(error))
+          }
+        })
   
 
   const closeModal = () => {
@@ -106,6 +127,13 @@ const SalesOrdering1 = () => {
       closeModal();
     }, 2000); // 2000 milliseconds (2 seconds)
   };
+
+  const handleInputChange = (index, newValue) => {
+    const updatedValues = [...status];
+    updatedValues[index] = newValue
+    setStatus(updatedValues);
+    };
+
 
   
 
@@ -141,10 +169,10 @@ const SalesOrdering1 = () => {
             <div className='flex-1'>Order Cost</div>
             <div className='flex-1'>Order Status</div>
           </div>
-          <div className='flex flex-col bg-white border-[1.5px] rounded-b-sm border-t-0 h-[500px] items-center border-black max-h-3/4 gap-[30px] overflow-y-auto'>
+          <div className='flex flex-col bg-white border-[1.5px] rounded-b-sm border-t-0 h-[550px] items-center border-black max-h-3/4 gap-[30px] overflow-y-auto relative'>
             {date.map((value, index) => {
             return(
-            <div className='flex flex-row w-full mt-5'>
+            <div className='flex flex-row w-full mt-5 '>
             <div className=''>
               <button
                 className='ml-4 mt-1 bg-[#F3F3F3] text-black  hover:bg-[#3BC4AF] hover:text-white'
@@ -155,11 +183,20 @@ const SalesOrdering1 = () => {
             </div>
             
             <div className='flex-1'>{lastName[index]}, {firstName[index]}</div>
-            <div className='flex-1'>{date[index]}</div>
+            <div className='flex-1'>{new Date(date[index]).toLocaleDateString('en-US')}</div>
             <div className='flex-1'>P{totalAmount[index]}</div>
-            <div className='flex-1'>{status[index]}</div>
+            <div className='flex-1'> 
+            <select value = {status[index]} onChange={(e) => handleInputChange(index, e.target.value)}> 
+              <option value="Pending Approval">Pending Approval</option>
+              <option value="Unpaid">Approved (Unpaid)</option>
+              <option value="Approved">Approved (Paid)</option> 
+              <option value="Shipped">Shipped</option> 
+              <option value="Delivered">Delivered</option> 
+            </select></div>
           </div>)
             })}
+
+            <button className = "absolute bottom-0 w-full text-xl p-4 delay-30 w-10/12 bg-[#3BC4AF] h-[60px] text-white rounded-sm"> Save Changes</button>
 
 
             
@@ -214,6 +251,6 @@ const SalesOrdering1 = () => {
       )}
     </div>
   );
-};
+                  };
 
 export default SalesOrdering1;

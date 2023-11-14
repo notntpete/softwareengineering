@@ -4,15 +4,52 @@ import CustomerSidebar from '../sidebarcust';
 import { Icon } from '@iconify/react';
 
 
+const modalStyles = {
+  modalContainer: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    background: 'rgba(0, 0, 0, 0.6)', // Grey out the background
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 999,
+  },
+  modal: {
+    background: 'white',
+    border: '1px solid #ccc', // Add a border to the modal
+    borderRadius: '5px',
+    padding: '20px',
+    width: '500px',
+    height: '400px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+  },
+  modalContent: {
+    textAlign: 'left',
+  },
+};
+
 
 function Customer() {
 
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [editedSalesId, setEditedSalesId] = useState('');
+  const [editedCustomerName, setEditedCustomerName] = useState('');
+
+  const [itemClass, setItemClass] = useState([]);
+  const [itemPrice, setItemPrice] = useState([]);
+  const [itemQuantity, setItemQuantity] = useState([]);
+
+
     const [id, setID] = useState(localStorage.getItem("customerID"));
 
-    const [profile, setProfile] = useState("")
+    const [profile, setProfile] = useState("");
     const [date, setDate] = useState([]);
     const [totalAmount, setTotal] = useState([]);
     const [status, setStatus] = useState([]);
+    const [orderID, setOrderID] = useState([]);
 
     useEffect(() => {
         const url = 'http://localhost:4000/customer';
@@ -27,15 +64,41 @@ function Customer() {
           .then((data) => {
             setProfile(data.profile[0]);
             console.log(data);
-            setDate(data.orders.map((row) => row.order_date));
             setTotal(data.orders.map((row) => row.total_amount))
             setStatus(data.orders.map((row) => row.order_status))
-            
+            setDate(data.orders.map((row) => row.order_date));
+            setOrderID(data.orders.map((row) => row.order_id));
+
+
           })
           .catch(error => console.error(error))
           }, []
       
     )
+
+    const openModal = (index) => {
+      const url = 'http://localhost:4000/details';
+      fetch(url, {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({id:index})
+      })
+      .then(response => response.json())
+      .then((data) => {
+        console.log(data);
+        setItemClass(data.map((row) => row.class));
+        setItemQuantity(data.map((row) => row.quantity))
+        setItemPrice(data.map((row) => row.total_price))
+        setModalOpen(true);})
+      .catch(error => console.error(error))
+      }  
+
+    const closeModal = () => {
+      setModalOpen(false);
+    };
+
 
   return (
     <div className="w-screen min-h-screen flex">
@@ -86,24 +149,64 @@ function Customer() {
             return(
                 <div className="flex flex-row w-full mt-5">
               <div className="flex-[0.1]">
-                <Link to="/customer"><button className="ml-4 mt-1 bg-[#F3F3F3] text-black hover:bg-[#3BC4AF] hover:text-white">
+                <Link to="/customer"><button onClick = {() => openModal(orderID[index])}className="ml-4 mt-1 bg-[#F3F3F3] text-black hover:bg-[#3BC4AF] hover:text-white">
                   <Icon icon="bxs:edit" className="h-5 w-5" />
                 </button></Link>
               </div>
-              <div className="flex-1">{date[index]}</div>
+              <div className="flex-1">{new Date(date[index]).toLocaleDateString('en-US')}</div>
               <div className="flex-1">50 boxes</div>
               <div className="flex-1">P{totalAmount[index]}</div>
               <div className="flex-1">{status[index]}</div>
             </div>
             )
           })}
-            
-          
-            
-
-            
           </div>
         </div>
+
+        {isModalOpen && (
+        <div style={modalStyles.modalContainer}>
+          <div style={modalStyles.modal}>
+            <div style={modalStyles.modalContent}>
+              <div className="text-center text-xl font-bold mb-9">Order Details</div>
+              <div className="flex flex-col gap-6" style={{ justifyContent: 'flex-end' }}>
+                {/* Add input fields for editing */}
+
+                <div className="flex flex-row bg-[#D9D9D9] w-[460px] border-[1.4px] rounded-t-sm h-16 justify-center items-center font-bold border-black shadow-md">
+            <div className="flex"></div>
+
+            
+       
+            <div className="flex-1 ml-2">Class</div>
+            <div className="flex-1">Quantity Order</div>
+            <div className="flex-1">Total Price</div>
+          </div>
+                {itemClass.map((value, index) => {
+                  return(
+                  <div className='flex ml-2 flex-row w-full mt-2'>
+                  <div className='flex-1'>{itemClass[index]}</div>
+                  <div className='flex-1'>{itemQuantity[index]}</div>
+                  <div className='flex-1'>P{itemPrice[index]}</div>
+                  
+                  </div>
+                )})}
+                
+                
+                {/* Add more input fields for editing */}
+                <div className='flex flex-col items-center gap-6 mt-[20px]'>
+                  
+                  <button
+                    onClick={closeModal}
+                    className="delay-150 bg-[#D9D9D9] w-[75px] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3] place-content-end"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+        
         
       </div>
     </div>

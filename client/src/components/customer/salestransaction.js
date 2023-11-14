@@ -54,6 +54,7 @@ function SalesTransaction(){
   const [weight, setWeight] = useState();
   const[totalPrice, setTotalPrice] = useState();
   let sum = 0
+  let initialSum = 0;
 
   const[user, setUser] = useState('')
 
@@ -106,7 +107,6 @@ function SalesTransaction(){
   const resetArrayToZero = () => {
     // Create a new array with all elements set to 0
     const newArray = new Array(inputValues.length).fill('');
-
     // Update the state with the new array
     setInputValues(newArray);
   };
@@ -118,7 +118,7 @@ function SalesTransaction(){
     for(let i = 0; i < productPrice.length; i++){
       sum += productPrice[i] * inputValues[i]
     }
-    setTotalPrice(sum);
+
   };
 
   const handleSubmit = (event) =>{
@@ -126,6 +126,11 @@ function SalesTransaction(){
     //create confirmation modal of sales order
     if(tester == true){
       event.preventDefault();
+      for(let i = 0; i < inputValues.length; i++){
+        initialSum = inputValues[i] * productPrice[i]
+        sum += initialSum;
+      }
+      console.log(sum)
       console.log("submitted");
       const url = 'http://localhost:4000/sales';
       fetch(url, {
@@ -133,7 +138,7 @@ function SalesTransaction(){
           headers: {
           'Content-Type': 'application/json'
           },
-          body: JSON.stringify({quantity:inputValues, products:product, totalPrice:totalPrice, user:user})
+          body: JSON.stringify({quantity:inputValues, products:product, totalPrice:sum, user:user})
       })
       .then(response => response.json())
       .catch(error => console.error(error))

@@ -111,7 +111,6 @@ app.post('/sales', (req, res) => {
             console.log("Error");
             return;
         }
-        
         for(let i = 0; i < req.body.products.length; i++){
             currentProduct = req.body.products[i];
             let query = 'INSERT INTO order_item (order_id, product_id, quantity, item_price, total_price) values (?, ?, ?, ?, ?)' //lacks order_id, total_price, stockout_repack_id
@@ -153,6 +152,8 @@ app.post('/sales', (req, res) => {
 
     
 })
+
+
 
 app.get('/inventory', (req,res) => {
     const query = 'SELECT * from products'
@@ -343,7 +344,8 @@ app.post('/loginemp' ,(req, res) => {
 })
 
 app.post('/verifycustomer', (req, res) => {
-    console.log(req.body);
+    updateQuery = `UPDATE customers SET verified = 1 WHERE customer_id = ${req.body.id}`
+    connection.execute(updateQuery);
 
 
 })

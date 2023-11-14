@@ -50,6 +50,7 @@ function AdminSalesTransaction(){
       const[totalPrice, setTotalPrice] = useState();
       
       let sum = 0
+      let initialSum = 0;
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -107,7 +108,6 @@ function AdminSalesTransaction(){
     for(let i = 0; i < productPrice.length; i++){
       sum += productPrice[i] * inputValues[i]
     }
-    setTotalPrice(sum);
   };
 
   const handleSubmit = (event) =>{
@@ -117,12 +117,16 @@ function AdminSalesTransaction(){
       event.preventDefault();
       console.log("submitted");
       const url = 'http://localhost:4000/sales';
+      for(let i = 0; i < inputValues.length; i++){
+        initialSum = inputValues[i] * productPrice[i]
+        sum += initialSum;
+      }
       fetch(url, {
           method: 'POST',
           headers: {
           'Content-Type': 'application/json'
           },
-          body: JSON.stringify({quantity:inputValues, products:product, totalPrice:totalPrice})
+          body: JSON.stringify({quantity:inputValues, products:product, totalPrice:sum})
       })
       .then(response => response.json())
       .catch(error => console.error(error))
