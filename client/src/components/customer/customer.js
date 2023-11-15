@@ -41,6 +41,7 @@ function Customer() {
   const [itemClass, setItemClass] = useState([]);
   const [itemPrice, setItemPrice] = useState([]);
   const [itemQuantity, setItemQuantity] = useState([]);
+  const [itemMeasure, setItemMeasure] = useState([]);
 
 
     const [id, setID] = useState(localStorage.getItem("customerID"));
@@ -68,6 +69,7 @@ function Customer() {
             setStatus(data.orders.map((row) => row.order_status))
             setDate(data.orders.map((row) => row.order_date));
             setOrderID(data.orders.map((row) => row.order_id));
+            
 
 
           })
@@ -91,7 +93,9 @@ function Customer() {
         setItemClass(data.map((row) => row.class));
         setItemQuantity(data.map((row) => row.quantity))
         setItemPrice(data.map((row) => row.total_price))
-        setModalOpen(true);})
+        setItemMeasure(data.map((row) => row.measurement_type))
+        setModalOpen(true);
+      })
       .catch(error => console.error(error))
       }  
 
@@ -184,7 +188,7 @@ function Customer() {
                   return(
                   <div className='flex ml-2 flex-row w-full mt-2'>
                   <div className='flex-1'>{itemClass[index]}</div>
-                  <div className='flex-1'>{itemQuantity[index]}</div>
+                  <div className='flex-1'>{itemQuantity[index]} {itemMeasure[index]}</div>
                   <div className='flex-1'>P{itemPrice[index]}</div>
                   
                   </div>

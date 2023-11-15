@@ -153,7 +153,23 @@ app.post('/sales', (req, res) => {
     
 })
 
+app.post('/changestatus', (req, res) => {
+    console.log(req.body);
 
+    for(let i = 0; i < req.body.id.length; i++){
+        let insertQuery = `INSERT INTO status_log(order_id, user_id, previous_order_status, new_order_status) VALUES (?,?,?,?)`
+        values = [req.body.id, ]
+        //connection.execute(insertQuery); //create id something
+    }
+
+
+    for(let i = 0; i < req.body.id.length; i++){
+        let updateQuery = `UPDATE orders SET order_status = '${req.body.status[i]}' WHERE order_id = ${req.body.id[i]}`
+        connection.execute(updateQuery);
+    }
+
+    
+})
 
 app.get('/inventory', (req,res) => {
     const query = 'SELECT * from products'
@@ -291,7 +307,7 @@ app.get('/repack', (req, res) => {
 
 app.post('/details', (req, res) => {
     console.log(req.body);
-    let query = `SELECT order_id, item_price, quantity, total_price, class FROM order_item INNER JOIN products ON order_item.product_id = products.product_id WHERE order_id = ${req.body.id}`;
+    let query = `SELECT order_id, item_price, quantity, total_price, class, measurement_type FROM order_item INNER JOIN products ON order_item.product_id = products.product_id WHERE order_id = ${req.body.id}`;
     connection.query(query, (err, results) => {
         res.send(results);
     })
@@ -313,7 +329,6 @@ app.post('/logincus', (req, res) => {
     const query = `SELECT * FROM customers WHERE username = '${req.body.username}'`;
     
     connection.query(query, (err, results) => {
-        console.log(results);
         if(results.length != 0){
             if(results[0].password == req.body.password){
                 res.json({customerID: results[0].customer_id});
@@ -346,6 +361,17 @@ app.post('/loginemp' ,(req, res) => {
 app.post('/verifycustomer', (req, res) => {
     updateQuery = `UPDATE customers SET verified = 1 WHERE customer_id = ${req.body.id}`
     connection.execute(updateQuery);
+
+
+})
+
+app.post('/repackdetails', (req, res) => {
+
+    query = `SELECT repack_inventory.product_id, stock_quantity, repack_inventory.measurement_type, repack_inventory.expiration_date, class FROM repack_inventory INNER JOIN products ON repack_inventory.product_id = products.product_id WHERE stockin_repack_id = ${req.body.id}`;
+
+    connection.query(query, (err, results) => {
+        res.send(results);
+    })
 
 
 })

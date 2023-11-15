@@ -73,7 +73,7 @@ const SalesOrdering1 = () => {
           setItemPrice(data.map((row) => row.total_price))
           setModalOpen(true);})
         .catch(error => console.error(error))
-        }  
+      }  
   
         useEffect(() => {
           // Replace 'http://localhost:3001' with the URL of your Node.js server
@@ -88,26 +88,22 @@ const SalesOrdering1 = () => {
               setID(data.map((row)=> row.order_id)); 
               setLastName(data.map((row) => row.last_name));
               setFirstName(data.map((row) => row.first_name))
+              console.log(localStorage.getItem("adminID"));
             })
         }, []);
 
         const handleStatus = (() => {
-          let tester = window.confirm("Try to press")
+          let tester = window.confirm("Confirm Save?")
         //create confirmation modal of sales order
         if(tester == true){
-          event.preventDefault();
-        
-        inputValues.forEach(num => {
-            sum += parseFloat(num);
-        })
-
-          const url = 'http://localhost:4000/inventory';
+         
+          const url = 'http://localhost:4000/changestatus';
           fetch(url, {
               method: 'POST',
               headers: {
               'Content-Type': 'application/json'
               },
-              body: JSON.stringify({inputValues:inputValues, sacks: sacks, sum: sum, products: product})
+              body: JSON.stringify({status: status, id: id })
           })
           .then(response => response.json())
           .catch(error => console.error(error))
@@ -196,7 +192,7 @@ const SalesOrdering1 = () => {
           </div>)
             })}
 
-            <button className = "absolute bottom-0 w-full text-xl p-4 delay-30 w-10/12 bg-[#3BC4AF] h-[60px] text-white rounded-sm"> Save Changes</button>
+            <button onClick = {handleStatus} className = "absolute bottom-0 w-full text-xl p-4 delay-30 w-10/12 bg-[#3BC4AF] h-[60px] text-white rounded-sm"> Save Changes</button>
 
 
             

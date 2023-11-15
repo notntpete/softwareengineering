@@ -169,7 +169,7 @@ function Products() {
                 Sacks Page
               </button>
             </Link>
-            <Link to="/inventory">
+            <Link to="/repack">
               <button className="h-[30px] w-[200px] mr-6 bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3]">
                 Repack Page
               </button>
@@ -179,7 +179,7 @@ function Products() {
             </button>
           </div>
         </div>
-        <div className="flex flex-col w-10/12 shadow-lg mt-5">
+        <div className="flex flex-col w-10/12 shadow-lg mt-2">
           <div className="flex flex-row bg-[#D9D9D9] border-[1.4px] rounded-t-sm h-16 justify-center items-center font-bold border-black shadow-md">
             <div className="flex-[0.5]"></div>
        

@@ -93,16 +93,18 @@ function Inventory(){
             </button>
           </Link>
           <Link to="/products">
-            <button className="h-[30px] w-[200px] mr-6 bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3]">
+            <button className="h-[30px] w-[200px] mr-1 bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3]">
               Products Page
             </button>
           </Link>
+          <Link to="/repack">
           <button className="h-[30px] w-[200px] bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3]">
-            + Add Product
+            Repack Page
           </button>
+          </Link>
         </div>
       </div>
-      <div className="flex flex-col w-10/12 shadow-lg mt-5">
+      <div className="flex flex-col w-10/12 shadow-lg mt-2">
         <div className="flex flex-row bg-[#D9D9D9] border-[1.4px] rounded-t-sm h-16 justify-center items-center font-bold border-black shadow-md">
           <div className="flex-1">Sacks</div>
           <div className="flex-1">Class Type</div>
