@@ -116,24 +116,24 @@ function Inventory(){
 }
         <form>
                 
-          <div className='flex flex-col bg-white border-[1.5px] rounded-b-sm border-t-0 h-[500px] items-center border-black max-h-3/4 gap-[30px] overflow-y-auto'>
+  <div className='flex flex-col bg-white border-[1.5px] rounded-b-sm border-t-0 h-[500px] items-center border-black max-h-3/4 gap-[30px] overflow-y-auto'>
 
 {visibility.map((value, index) => {
 if(value == 1){
   return(
-    <div key={index} className="flex w-full mt-5">
+    <div key={index} className="flex w-full ml-32 mt-5">
       
-    <input value = {sacks} onChange = {handleInputSacks} class = "bg-lime-600 w-16"></input>
+    <input value = {sacks} onChange = {handleInputSacks} class = "rounded-md text-center bg-[#3BC4AF] w-32"></input>
       <div className="flex-1">{Class[index]}</div>
       <div className="flex-1">{measure[index]}</div>
     
-      <input
-                        class = "rounded-md text-center bg-lime-700 w-24"
-                        key={index}
-                        type="text"
-                        value={inputValues[index]}
-                        onChange={(e) => handleInputChange(index, e.target.value)}
-                            />
+      <div className='flex-1'><input
+                          class = "rounded-md text-center bg-[#3BC4AF] w-32"
+                          key={index}
+                          type="text"
+                          value={inputValues[index]}
+                          onChange={(e) => handleInputChange(index, e.target.value)}
+                              /></div>
     </div>
     )
 }

@@ -158,7 +158,7 @@ app.post('/changestatus', (req, res) => {
 
     for(let i = 0; i < req.body.id.length; i++){
         let insertQuery = `INSERT INTO status_log(order_id, user_id, previous_order_status, new_order_status) VALUES (?,?,?,?)`
-        values = [req.body.id, ]
+        //values = [req.body.id]
         //connection.execute(insertQuery); //create id something
     }
 
