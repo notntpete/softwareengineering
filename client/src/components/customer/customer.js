@@ -69,9 +69,6 @@ function Customer() {
             setStatus(data.orders.map((row) => row.order_status))
             setDate(data.orders.map((row) => row.order_date));
             setOrderID(data.orders.map((row) => row.order_id));
-            
-
-
           })
           .catch(error => console.error(error))
           }, []

@@ -30,6 +30,11 @@ const modalStyles = {
   },
 };
 
+let options = {
+  hour: '2-digit',
+  minute: '2-digit'
+};
+
 const SalesOrdering1 = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [editedSalesId, setEditedSalesId] = useState('');
@@ -39,6 +44,7 @@ const SalesOrdering1 = () => {
   const [date, setDate] = useState([]);
   const [totalAmount, setTotal] = useState([]);
   const [status, setStatus] = useState([]);
+  const [oldStatus, setOldStatus] = useState([]);
   const [orderItem, setOrderItem] = useState([]);
   const [visibility, setVisibility] = useState([]);
 
@@ -54,6 +60,7 @@ const SalesOrdering1 = () => {
 
   const [lastName, setLastName] = useState([]);
   const [firstName, setFirstName] = useState([]);
+  const [user, setUser] = useState(0);
 
 
   const openModal = (index) => {
@@ -80,7 +87,7 @@ const SalesOrdering1 = () => {
           fetch('http://localhost:4000/orders')
             .then((response) => response.json())
             .then((data) => {
-              console.log(data);
+              data.reverse();
               setData(data)
               setDate(data.map((row) => row.order_date));
               setTotal(data.map((row) => row.total_amount))
@@ -88,7 +95,8 @@ const SalesOrdering1 = () => {
               setID(data.map((row)=> row.order_id)); 
               setLastName(data.map((row) => row.last_name));
               setFirstName(data.map((row) => row.first_name))
-              console.log(localStorage.getItem("adminID"));
+              setOldStatus(data.map((row) =>  row.order_status));
+              setUser(localStorage.getItem("adminID"))
             })
         }, []);
 
@@ -103,7 +111,7 @@ const SalesOrdering1 = () => {
               headers: {
               'Content-Type': 'application/json'
               },
-              body: JSON.stringify({status: status, id: id })
+              body: JSON.stringify({newStatus: status, id: id, oldStatus: oldStatus, adminID: user })
           })
           .then(response => response.json())
           .catch(error => console.error(error))
@@ -177,18 +185,22 @@ const SalesOrdering1 = () => {
                 <Icon icon="bxs:edit" className='h-6 w-6' />
               </button>
             </div>
-            
+             
             <div className='flex-1'>{lastName[index]}, {firstName[index]}</div>
-            <div className='flex-1'>{new Date(date[index]).toLocaleDateString('en-US')}</div>
+            <div className='flex-1'>{new Date(date[index]).toLocaleDateString('en-US', options)}</div>
             <div className='flex-1'>P{totalAmount[index]}</div>
             <div className='flex-1'> 
+            
+            {(status[index] == "Delivered") ? (<div>Delivered</div>) : 
             <select value = {status[index]} onChange={(e) => handleInputChange(index, e.target.value)}> 
-              <option value="Pending Approval">Pending Approval</option>
-              <option value="Unpaid">Approved (Unpaid)</option>
-              <option value="Approved">Approved (Paid)</option> 
-              <option value="Shipped">Shipped</option> 
-              <option value="Delivered">Delivered</option> 
-            </select></div>
+            {(status[index] == "Pending Approval") ? (<option value="Pending Approval">Pending Approval</option>) : <span></span>}
+            {(status[index] == "Approved" || status[index] == "Unpaid" || status[index] == "Pending Approval") ? (<option value="Unpaid">Approved (Unpaid)</option> ) : <span></span>}
+            {(status[index] == "Approved" || status[index] == "Unpaid" || status[index] == "Pending Approval") ? (<option value="Approved">Approved (Paid)</option> ) : <span></span>}
+            <option value="Shipped">Shipped</option> 
+            <option value="Delivered">Delivered</option> 
+          </select>
+           }
+            </div>
           </div>)
             })}
 

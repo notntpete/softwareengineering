@@ -21,8 +21,9 @@ function LoginEmployee() {
       })
       .then(response => response.json())
       .then((data) => {{
-        localStorage.setItem("adminID", data.customerID)
-        console.log(localStorage);
+        //console.log(data);
+        localStorage.setItem("adminID", data.adminID)
+        //console.log(localStorage);
         window.location.replace('/adminsalestransaction');
       }})
       .catch(error => console.error(error))

@@ -19,6 +19,7 @@ import SacksInventory from './components/SacksInventory';
 import SalesTransaction from './components/customer/salestransaction'
 import Customer from './components/customer/customer';
 import VerifyCustomer from './components/admin/verifycustomer'
+import ImageUploader from './components/admin/imageupload';
 
 
 import { MyContextProvider } from './components/MyContext';
@@ -81,6 +82,7 @@ function App() {
       <Route path='/sacksinventory' element={<SacksInventory></SacksInventory>}></Route>
       <Route path = '/customer' element = {<Customer></Customer>}></Route>
       <Route path = '/verifycustomers' element = {<VerifyCustomer></VerifyCustomer>}></Route>
+      <Route path = '/image' element = {<ImageUploader></ImageUploader>}></Route>
 
     </Routes>
     

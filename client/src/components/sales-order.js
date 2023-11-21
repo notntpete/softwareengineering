@@ -8,7 +8,7 @@ function SalesOrdering(){
         fetch('http://localhost:4000/sales')
         .then(res => {return res.json()})
         .then(data => {
-          console.log(data[0].product);
+          data[0].reverse()
           setProduct(data[0].product)
           setClass(data[0].product.map((row) => row.class));
           setMeasure(data[0].product.map((row) => row.measurement_type)); //measurement types

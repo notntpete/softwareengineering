@@ -121,14 +121,15 @@ function Inventory(){
 {visibility.map((value, index) => {
 if(value == 1){
   return(
-    <div key={index} className="flex w-full ml-32 mt-5">
+    <div key={index} className="flex w-full ml-36 mt-5">
       
-    <input value = {sacks} onChange = {handleInputSacks} class = "rounded-md text-center bg-[#3BC4AF] w-32"></input>
-      <div className="flex-1">{Class[index]}</div>
-      <div className="flex-1">{measure[index]}</div>
+     
+      {(index == 0) ? (<input value = {sacks} onChange = {handleInputSacks} class = "rounded-md text-center bg-[#3BC4AF] w-32"></input>) : <div class = "w-32"></div>}
+      <div className="flex-1 ml-12">{Class[index]}</div>
+      <div className="flex-1 ml-[-70px]">{measure[index]}</div>
     
       <div className='flex-1'><input
-                          class = "rounded-md text-center bg-[#3BC4AF] w-32"
+                          class = "rounded-md text-center ml-[-70px] bg-[#3BC4AF] w-32"
                           key={index}
                           type="text"
                           value={inputValues[index]}

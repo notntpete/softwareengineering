@@ -154,17 +154,18 @@ app.post('/sales', (req, res) => {
 })
 
 app.post('/changestatus', (req, res) => {
-    console.log(req.body);
-
     for(let i = 0; i < req.body.id.length; i++){
-        let insertQuery = `INSERT INTO status_log(order_id, user_id, previous_order_status, new_order_status) VALUES (?,?,?,?)`
-        //values = [req.body.id]
-        //connection.execute(insertQuery); //create id something
+       // console.log(req.body);
+        if(req.body.oldStatus[i] != req.body.newStatus[i]){
+            let insertQuery = `INSERT INTO status_log(order_id, user_id, previous_order_status, new_order_status, status_date) VALUES (?,?,?,?,?)`
+            let values = [req.body.id[i], req.body.adminID, req.body.oldStatus[i], req.body.newStatus[i], new Date()];
+            connection.execute(insertQuery, values); //create id something
+        }
+        
     }
 
-
     for(let i = 0; i < req.body.id.length; i++){
-        let updateQuery = `UPDATE orders SET order_status = '${req.body.status[i]}' WHERE order_id = ${req.body.id[i]}`
+        let updateQuery = `UPDATE orders SET order_status = '${req.body.newStatus[i]}' WHERE order_id = ${req.body.id[i]}`
         connection.execute(updateQuery);
     }
 
@@ -187,8 +188,9 @@ app.get('/inventory', (req,res) => {
 })
 
 app.post('/inventory', (req, res) => {
-    reqValues = req.body;
-    console.log(reqValues);
+    let reqValues = req.body;
+    let sackQuantity = req.body.sacks
+    
 
     let repackQuery = `INSERT INTO stockin_repack(stockin_date, total_quantity) VALUES (?, ?)`
     repackValues = [new Date(), req.body.sum]
@@ -210,8 +212,29 @@ app.post('/inventory', (req, res) => {
         }
         }
     })
-})
+    
+    let minIDQuery = `SELECT sack_inventory_id, sack_quantity FROM sack_inventory`
+    connection.query(minIDQuery, (err, results) => {
+    console.log(results);
+    for(let i = 0; sackQuantity > 0; i++){
+            let outSackQuery = `INSERT INTO stockout_sack(stockout_sack_quantity, stockout_date) VALUES(?, ?)`
+            let values = [sackQuantity, new Date()];
+            connection.execute(outSackQuery, values);
 
+            if((results[i][`sack_quantity`]) > sackQuantity){
+                let sackQuery = `UPDATE sack_inventory SET sack_quantity = sack_quantity - ${parseFloat(sackQuantity)} WHERE sack_inventory_id = ${results[i].sack_inventory_id}`
+                connection.execute(sackQuery);
+                sackQuantity = 0;
+            }
+            else{
+                sackQuantity -= results[0][`sack_quantity`] 
+                let sackQuery = `DELETE FROM sack_inventory WHERE sack_inventory_id = ${results[0][`sack_inventory_id`]}`
+                connection.execute(sackQuery);
+            }
+        
+    }
+    })
+})
 
 app.post('/sacks', (req, res) => {
     let insertStockQuery = 'INSERT INTO stockin_sack(stockin_sack_date, sack_quantity) VALUES (?, ?)';
@@ -226,6 +249,20 @@ app.post('/sacks', (req, res) => {
         let insertSackQuery = 'INSERT INTO sack_inventory(sack_quantity, stockin_sack_id) VALUES (?, ?)'
         newValues = [req.body.sacks, result[0]['MAX(stockin_sack_id)']];
         connection.execute(insertSackQuery, newValues);
+    })
+})
+
+app.get('/sacks', (req, res) => {
+    console.log("get request made");
+    query = `SELECT sack_inventory.sack_quantity, sack_inventory.stockin_sack_id, stockin_sack_date FROM sack_inventory INNER JOIN stockin_sack ON stockin_sack.stockin_sack_id = sack_inventory.stockin_sack_id`;
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error('Error executing MySQL query:', err);
+            res.status(500).json({ error: 'Internal Server Error' });
+            return;
+        }
+        console.log(results);
+        res.json(results);
     })
 })
 
@@ -345,10 +382,10 @@ app.post('/loginemp' ,(req, res) => {
     const query = `SELECT * FROM admins WHERE username = '${req.body.username}'`;
     
     connection.query(query, (err, results) => {
-        //console.log(results);
+        console.log(results);
         if(results.length != 0){
             if(results[0].password == req.body.password){
-                res.json({customerID: results[0].customer_id});
+                res.json({adminID: results[0].user_id});
             }
             else{
                 console.log("password wrong");
