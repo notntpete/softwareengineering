@@ -5,6 +5,7 @@ import CustomerSidebar from '../sidebarcust';
 import { Icon } from '@iconify/react';
 import { MyContext } from '../MyContext';
 import Customer from './customer';
+import ImageUploadForm from '../ImageUploadForm';
 
 
 const modalStyles = {
@@ -164,6 +165,7 @@ function SalesTransaction(){
               
 
             </div>
+            <ImageUploadForm></ImageUploadForm>
 
             <div className='flex flex-col bg-white border-[1.5px] rounded-b-sm border-t-0 h-[500px] items-center border-black max-h-3/4 gap-[30px] overflow-y-auto'>
               {visibility.map((value, index) => {
@@ -184,6 +186,7 @@ function SalesTransaction(){
                           value={inputValues[index]}
                           onChange={(e) => handleInputChange(index, e.target.value)}
                               /></div>
+                        
                       
                       </div>
                     )

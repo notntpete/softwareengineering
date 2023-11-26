@@ -8,7 +8,7 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Set your upload directory
+    cb(null, __dirname + '/images/'); // Set your upload directory
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + '-' + file.originalname);
