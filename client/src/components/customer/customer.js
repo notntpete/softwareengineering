@@ -65,6 +65,7 @@ function Customer() {
           .then((data) => {
             setProfile(data.profile[0]);
             console.log(data);
+            data.orders.reverse();
             setTotal(data.orders.map((row) => row.total_amount))
             setStatus(data.orders.map((row) => row.order_status))
             setDate(data.orders.map((row) => row.order_date));
@@ -86,7 +87,6 @@ function Customer() {
       })
       .then(response => response.json())
       .then((data) => {
-        console.log(data);
         setItemClass(data.map((row) => row.class));
         setItemQuantity(data.map((row) => row.quantity))
         setItemPrice(data.map((row) => row.total_price))

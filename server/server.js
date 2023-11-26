@@ -2,6 +2,27 @@ const express = require('express');
 const app = express();
 const mysql = require('mysql2');
 const cors = require('cors');
+const multer = require('multer');
+
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Set your upload directory
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });    
+
+app.post('/upload', upload.single('file'), (req, res) => {
+  // Handle the uploaded file here
+  const filePath = req.file.path;
+  // Save the file path to your MySQL database
+  res.json({ filePath: filePath });
+});
 
 app.use(cors());
 app.use(express.json());
@@ -16,13 +37,15 @@ const connection = mysql.createConnection({
     database: 'softeng'
   });
 
-  connection.connect(err => {
+connection.connect(err => {
     if (err) {
       console.error('Error connecting to MySQL:', err);
       return;
     }
     console.log('Connected to MySQL');
   });
+
+
 
 
 app.get('/customer', (req, res) => {
@@ -197,43 +220,59 @@ app.post('/inventory', (req, res) => {
     connection.execute(repackQuery, repackValues); //creates new value for repack_stockin_id
 
     let idQuery = `SELECT MAX(stockin_repack_id) FROM stockin_repack`
-    connection.query(idQuery, (err, results) => {
+    connection.query(idQuery, (err, maxResults) => {
         for(let i = 0; i < reqValues.inputValues.length; i++){
             if(reqValues.inputValues[i] != 0){
             let query = `INSERT INTO repack_inventory(product_id, stock_in_date, stock_quantity, product_price, measurement_type, stockin_repack_id, expiration_date) VALUES(?, ?, ?, ?, ?, ?, ?)`
             const today = new Date();
             today.setDate(today.getDate() + 14);
 
-            values = [reqValues.products[i].product_id, new Date(), parseFloat(reqValues.inputValues[i]), reqValues.products[i].price, reqValues.products[i].measurement_type, results[0]['MAX(stockin_repack_id)'], today]
+            values = [reqValues.products[i].product_id, new Date(), parseFloat(reqValues.inputValues[i]), reqValues.products[i].price, reqValues.products[i].measurement_type, maxResults[0]['MAX(stockin_repack_id)'], today]
             connection.execute(query, values);
-    
+                
+
             let productQuery = `UPDATE products SET total_quantity = total_quantity + ${parseFloat(reqValues.inputValues[i])} WHERE product_id = ${reqValues.products[i].product_id}`
             connection.execute(productQuery);
         }
         }
-    })
-    
-    let minIDQuery = `SELECT sack_inventory_id, sack_quantity FROM sack_inventory`
-    connection.query(minIDQuery, (err, results) => {
-    console.log(results);
-    for(let i = 0; sackQuantity > 0; i++){
-            let outSackQuery = `INSERT INTO stockout_sack(stockout_sack_quantity, stockout_date) VALUES(?, ?)`
-            let values = [sackQuantity, new Date()];
-            connection.execute(outSackQuery, values);
 
-            if((results[i][`sack_quantity`]) > sackQuantity){
-                let sackQuery = `UPDATE sack_inventory SET sack_quantity = sack_quantity - ${parseFloat(sackQuantity)} WHERE sack_inventory_id = ${results[i].sack_inventory_id}`
-                connection.execute(sackQuery);
-                sackQuantity = 0;
-            }
+        let minIDQuery = `SELECT sack_inventory_id, sack_quantity FROM sack_inventory`
+        connection.query(minIDQuery, (err, results) => {
+        for(let i = 0; sackQuantity != 0; i++){
+                if((results[0].sack_quantity) < sackQuantity && results.length == 1){
+                    res.send("lacking sacks");
+                    console.log("breaking");
+                    break;
+                }
+
+            let outSackQuery = `INSERT INTO stockout_sack(stockout_sack_quantity, stockout_date, stockinn_repack_id) VALUES(?, ?, ?)`
+            let values = [sackQuantity, new Date(),maxResults[0]['MAX(stockin_repack_id)']];
+            connection.execute(outSackQuery, values);
+            
+            
+            if((results[i].sack_quantity) > sackQuantity){
+                    let sackQuery = `UPDATE sack_inventory SET sack_quantity = sack_quantity - ${parseFloat(sackQuantity)} WHERE sack_inventory_id = ${results[i].sack_inventory_id}`
+                    connection.execute(sackQuery)
+                    console.log("updated");
+                    sackQuantity = 0;
+                }
             else{
-                sackQuantity -= results[0][`sack_quantity`] 
-                let sackQuery = `DELETE FROM sack_inventory WHERE sack_inventory_id = ${results[0][`sack_inventory_id`]}`
-                connection.execute(sackQuery);
-            }
-        
+                    sackQuantity -= results[0][`sack_quantity`] 
+                    let sackQuery = `DELETE FROM sack_inventory WHERE sack_inventory_id = ${results[0][`sack_inventory_id`]}`
+                    connection.execute(sackQuery);
+                }
+                
+
+            
     }
     })
+
+
+
+
+    })
+    
+    
 })
 
 app.post('/sacks', (req, res) => {

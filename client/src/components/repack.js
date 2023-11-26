@@ -30,6 +30,11 @@ const modalStyles = {
   },
 };
 
+let options = {
+  hour: '2-digit',
+  minute: '2-digit'
+};
+
 function Repack(){
 
   const [isModalOpen, setModalOpen] = useState(false);
@@ -52,6 +57,8 @@ function Repack(){
         .then(data => {
           setStockIn(data[0]);
           setRepack(data[1]);
+          data[0].reverse();
+
 
           setID(data[0].map((row) => row.stockin_repack_id));
           setDate(data[0].map((row) =>  row.stockin_date));
@@ -72,6 +79,7 @@ function Repack(){
         })
         .then(response => response.json())
         .then((data) => {
+          //data.reverse();
           setClassName(data.map((row) => row.class));
           setMeasure(data.map((row) => row.measurement_type));
           setExpiration(data.map((row) => row.expiration_date));
@@ -136,7 +144,7 @@ return(
               <Icon icon="bxs:edit" className='h-6 w-6' />
             </button>
           </div>
-          <div className='flex-1 '>{new Date(date[index]).toLocaleDateString('en-US')}</div>
+          <div className='flex-1 '>{new Date(date[index]).toLocaleDateString('en-US', options)}</div>
           <div className='flex-1'> Employee</div>
         </div>
         )
