@@ -130,7 +130,7 @@ const SacksInventory = () => {
                                   type = "date"
                                   value = {newDate}
                                   onChange={(event) => setNewDate(event.target.value)}
-                                  className="rounded-lg bg-teal-500 h-6 w-[105px]"
+                                  className="rounded-lg  bg-gray-200 border-[1.5px] border-black h-6 w-[120px]"
                                 />
                               </div>
                             </h2>
@@ -140,7 +140,7 @@ const SacksInventory = () => {
                                 <input
                                   value={newQuantity}
                                   onChange={(event) => setNewQuantity(event.target.value)}
-                                  className="ml-[75px] rounded-lg bg-teal-500 h-6 w-[105px]"
+                                  className="ml-[80px] rounded-lg  bg-gray-200 border-[1.5px] border-black h-6 w-[120px]"
                                 />
                               </div>
                             </h2>
