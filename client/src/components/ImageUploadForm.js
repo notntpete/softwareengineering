@@ -26,8 +26,10 @@ const ImageUploadForm = () => {
 
   return (
     <div>
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Upload</button>
+    
+      <input type="file" onChange={handleFileChange}/>
+      <div> <button className = "delay-150 mt-[100px] bg-[#D9D9D9] w-[75px] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3] place-content-end" onClick={handleUpload}>Upload</button></div>
+      
     </div>
   );
 };

@@ -27,7 +27,7 @@ const modalStyles = {
     borderRadius: '5px',
     padding: '20px',
     width: '500px',
-    height: '400px',
+    height: '500px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
   },
   modalContent: {
@@ -141,9 +141,10 @@ function SalesTransaction(){
           },
           body: JSON.stringify({quantity:inputValues, products:product, totalPrice:sum, user:user})
       })
-      .then(response => response.json())
+      .then(response => {response.json()})
       .catch(error => console.error(error))
       }
+      openModal();
   }
 
 
@@ -165,7 +166,6 @@ function SalesTransaction(){
               
 
             </div>
-            <ImageUploadForm></ImageUploadForm>
 
             <div className='flex flex-col bg-white border-[1.5px] rounded-b-sm border-t-0 h-[500px] items-center border-black max-h-3/4 gap-[30px] overflow-y-auto'>
               {visibility.map((value, index) => {
@@ -207,26 +207,20 @@ function SalesTransaction(){
                     <div style={modalStyles.modalContainer}>
                       <div style={modalStyles.modal}>
                         <div style={modalStyles.modalContent}>
-                          <div className="text-center text-xl font-bold mb-9">Add Product</div>
-                          <div className="flex flex-col gap-6" style={{ justifyContent: 'flex-end' }}>
-                            <h2 className="flex-1 flex ml-10">
-                              <b className="flex-1">Product Name: </b>
-                              <div className="flex-1">
-                                <input
-                                  value={productName}
-                                  onChange={(event) => setProductName(event.target.value)}
-                                  className="rounded-lg bg-teal-500 h-6 w-[105px]"
-                                />
-                              </div>
-                            </h2>
+                          <div className="flex flex-col gap-6 text-center" style={{ justifyContent: 'flex-end' }}>
+                            <h1 className="text-2xl">
+                              <b className="flex-1">You have successfully placed an order! </b>
+                            </h1>
+
+                            <h2 className = "text-left"> You can now pay for the order in the number using GCash using the number  </h2>
+
+
+                            <h2 className = "mt-[-10px] text-left"> Mobile Number: 0919 352 1840</h2>
+
+                            <h2> Upload the receipt below for our sales representatives to approve the order</h2>
+                            <ImageUploadForm></ImageUploadForm>
                             
-                            <div className='flex flex-col items-center gap-6 mt-[120px]'>
-                              <button
-                                onClick={handleAddProduct}
-                                className="delay-150 bg-[#D9D9D9] w-[75px] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3] place-content-end"
-                              >
-                                Submit
-                              </button>
+                            <div className='flex flex-col items-center gap-6 '>
                               <button
                                 onClick={closeModal}
                                 className="delay-150 bg-[#D9D9D9] w-[75px] rounded-tr-sm rounded-br-sm border-[1.5px] border-black hover:bg-[#F3F3F3] place-content-end"
@@ -247,7 +241,7 @@ function SalesTransaction(){
             <div className="flex flex-row bg-[#D9D9D9] border-[1.4px] rounded-t-sm h-16 justify-center items-center font-bold border-black shadow-md border-t-0 rounded-b-sm">
                 <div className="flex-1 ml-8 text-left">Total bought = 1500 kg</div>
                 <div className="flex-1 text-left">Total Price =  50000php</div>
-                <div className="flex-1 "><button onClick = {handleSubmit} className='h-[30px] w-[150px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]'>
+                <div className="flex-1 "><button onClick = {handleSubmit}  className='h-[30px] w-[150px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]'>
                Submit
                 </button></div>
                 

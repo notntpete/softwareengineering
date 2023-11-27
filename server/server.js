@@ -8,7 +8,7 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, __dirname + '/images/'); // Set your upload directory
+    cb(null, '/Users/aaronjustinmacias/Documents/Programming/softwareengineering/client/src/components/customer/images/'); // Set your upload directory
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + '-' + file.originalname);
@@ -18,10 +18,19 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });    
 
 app.post('/upload', upload.single('file'), (req, res) => {
-  // Handle the uploaded file here
-  const filePath = req.file.path;
-  // Save the file path to your MySQL database
-  res.json({ filePath: filePath });
+    // Handle the uploaded file here
+    const fileName = req.file.filename;
+    const filePath = req.file.path;
+    // Save the file path to your MySQL database
+    res.json({ filePath: filePath });
+
+    orderQuery = `SELECT MAX(order_id) FROM orders`
+    connection.query(orderQuery, (err, results) => {
+        imageQuery = `UPDATE orders SET order_receipt = "./images/${fileName}" WHERE order_id = ${results[0][`MAX(order_id)`]}`
+        connection.execute(imageQuery);
+    })
+
+
 });
 
 app.use(cors());
@@ -320,6 +329,15 @@ app.get('/orders', (req, res) =>{
       });
 })
 
+app.post('/filter', (req, res) => {
+    console.log(req.body);
+    query = `SELECT order_id, order_date, total_amount, order_status, orders.customer_id, last_name, first_name FROM orders INNER JOIN customers ON orders.customer_id = customers.customer_id WHERE orders.order_status = '${req.body.selectedFilter}'`;
+    connection.query(query, (err, results) => {
+        res.send(results);
+        console.log(results);
+    })
+})
+
 app.get('/repack', (req, res) => {
     repackQuery = `SELECT * FROM repack_inventory`;
     
@@ -382,12 +400,17 @@ app.get('/repack', (req, res) => {
 })
 
 app.post('/details', (req, res) => {
-    console.log(req.body);
-    let query = `SELECT order_id, item_price, quantity, total_price, class, measurement_type FROM order_item INNER JOIN products ON order_item.product_id = products.product_id WHERE order_id = ${req.body.id}`;
+    //console.log(req.body);
+    let query = `SELECT order_item.order_id, orders.order_receipt, item_price, quantity, total_price, class, measurement_type FROM order_item INNER JOIN products ON order_item.product_id = products.product_id INNER JOIN orders ON orders.order_id = order_item.order_id WHERE order_item.order_id = ${req.body.id}`
     connection.query(query, (err, results) => {
         res.send(results);
-    })
+        console.log(results);
+        })
 }) 
+
+
+
+
 
 
 app.post('/regcus', (req, res) => {

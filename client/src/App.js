@@ -3,7 +3,7 @@ import {Link, Route, Routes} from "react-router-dom";
 import './App.css';
 import Products from './components/admin/products'
 import SalesOrdering from './components/sales-order'
-import SalesOrdering1 from './components/admin/salesordering'
+import SalesOrdering1 from './components/customer/salesordering'
 import Inventory from './components/admin/inventory';
 import Sacks from './components/sacks'
 import RegisterCustomer from './components/regcus';
@@ -20,6 +20,7 @@ import SalesTransaction from './components/customer/salestransaction'
 import Customer from './components/customer/customer';
 import VerifyCustomer from './components/admin/verifycustomer'
 import ImageUploader from './components/admin/imageupload';
+import CustomerProfile from './components/customer/customerprofile'
 
 
 import { MyContextProvider } from './components/MyContext';
@@ -83,6 +84,8 @@ function App() {
       <Route path = '/customer' element = {<Customer></Customer>}></Route>
       <Route path = '/verifycustomers' element = {<VerifyCustomer></VerifyCustomer>}></Route>
       <Route path = '/image' element = {<ImageUploader></ImageUploader>}></Route>
+      <Route path = '/customerprofile' element = {<CustomerProfile></CustomerProfile>}></Route>
+
 
     </Routes>
     

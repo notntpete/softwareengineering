@@ -21,8 +21,8 @@ const modalStyles = {
     border: '1px solid #ccc', // Add a border to the modal
     borderRadius: '5px',
     padding: '20px',
-    width: '500px',
-    height: '400px',
+    width: '505px',
+    height: '700px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
   },
   modalContent: {
@@ -58,9 +58,13 @@ const SalesOrdering1 = () => {
   const [itemQuantity, setItemQuantity] = useState([]);
   const [itemTotal, setItemTotal] = useState([]);
 
+  const [orderReceipt, setOrderReceipt] = useState("")
+
   const [lastName, setLastName] = useState([]);
   const [firstName, setFirstName] = useState([]);
   const [user, setUser] = useState(0);
+
+  const [selectedFilter, setSelectedFiler] = useState("")
 
 
   const openModal = (index) => {
@@ -75,6 +79,7 @@ const SalesOrdering1 = () => {
         .then(response => response.json())
         .then((data) => {
           console.log(data);
+          setOrderReceipt(data[0].order_receipt)
           setItemClass(data.map((row) => row.class));
           setItemQuantity(data.map((row) => row.quantity))
           setItemPrice(data.map((row) => row.total_price))
@@ -82,41 +87,68 @@ const SalesOrdering1 = () => {
         .catch(error => console.error(error))
       }  
   
-        useEffect(() => {
-          // Replace 'http://localhost:3001' with the URL of your Node.js server
-          fetch('http://localhost:4000/orders')
-            .then((response) => response.json())
-            .then((data) => {
-              data.reverse();
-              setData(data)
-              setDate(data.map((row) => row.order_date));
-              setTotal(data.map((row) => row.total_amount))
-              setStatus(data.map((row) => row.order_status))
-              setID(data.map((row)=> row.order_id)); 
-              setLastName(data.map((row) => row.last_name));
-              setFirstName(data.map((row) => row.first_name))
-              setOldStatus(data.map((row) =>  row.order_status));
-              setUser(localStorage.getItem("adminID"))
-            })
-        }, []);
+useEffect(() => {
+  // Replace 'http://localhost:3001' with the URL of your Node.js server
+  fetch('http://localhost:4000/orders')
+    .then((response) => response.json())
+    .then((data) => {
+      data.reverse();
+      setData(data)
+      setDate(data.map((row) => row.order_date));
+      setTotal(data.map((row) => row.total_amount))
+      setStatus(data.map((row) => row.order_status))
+      setID(data.map((row)=> row.order_id)); 
+      setLastName(data.map((row) => row.last_name));
+      setFirstName(data.map((row) => row.first_name))
+      setOldStatus(data.map((row) =>  row.order_status));
+      setUser(localStorage.getItem("adminID"))
+    })
+    }, []);
 
-        const handleStatus = (() => {
-          let tester = window.confirm("Confirm Save?")
-        //create confirmation modal of sales order
-        if(tester == true){
-         
-          const url = 'http://localhost:4000/changestatus';
-          fetch(url, {
-              method: 'POST',
-              headers: {
-              'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({newStatus: status, id: id, oldStatus: oldStatus, adminID: user })
-          })
-          .then(response => response.json())
-          .catch(error => console.error(error))
-          }
-        })
+  const handleStatus = (() => {
+    let tester = window.confirm("Confirm Save?")
+    //create confirmation modal of sales order
+    if(tester == true){
+    
+    const url = 'http://localhost:4000/changestatus';
+    fetch(url, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({newStatus: status, id: id, oldStatus: oldStatus, adminID: user })
+    })
+    .then(response => response.json())
+    .catch(error => console.error(error))
+    }
+  })
+
+  const handleFilter = (() => {
+    const url = 'http://localhost:4000/filter';
+    fetch(url, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({selectedFilter:selectedFilter, adminID: user})
+      })
+    .then(response => response.json())
+    .then((data) => {
+      data.reverse();
+      setData(data)
+      setDate(data.map((row) => row.order_date));
+      setTotal(data.map((row) => row.total_amount))
+      setStatus(data.map((row) => row.order_status))
+      setID(data.map((row)=> row.order_id)); 
+      setLastName(data.map((row) => row.last_name));
+      setFirstName(data.map((row) => row.first_name))
+      setOldStatus(data.map((row) =>  row.order_status));
+      setUser(localStorage.getItem("adminID"))
+    })
+    .catch(error => console.error(error))
+ 
+    }
+  )
   
 
   const closeModal = () => {
@@ -132,11 +164,17 @@ const SalesOrdering1 = () => {
     }, 2000); // 2000 milliseconds (2 seconds)
   };
 
+  const handleFilterChange = (newValue) => {
+    setSelectedFiler(newValue);
+    console.log(newValue);
+  }
+
   const handleInputChange = (index, newValue) => {
     const updatedValues = [...status];
     updatedValues[index] = newValue
     setStatus(updatedValues);
     };
+
 
 
   
@@ -157,11 +195,20 @@ const SalesOrdering1 = () => {
         <div className='font-bold text-2xl mt-5'>Sales Ordering</div>
         <div className='flex flex-col w-10/12'>
           <div className='flex justify-end'>
+          <select value = {selectedFilter} onChange ={(event) => {handleFilterChange(event.target.value)} }className = "w-40 ml-4">
+            <option value="Rejected">Rejected</option>
+            <option value="Pending Approval">Pending Approval</option>
+            <option value="Unpaid">Unpaid</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered">Delivered</option>
+          </select>
+          <button className = "mr-2 bg-[#3BC4AF] text-white p-2" onClick = {handleFilter}> Filter Results </button>
             <Link to="/adminsalestransaction">
               <button className='h-[30px] w-[200px] bg-[#D9D9D9] rounded-sm border-[1.5px] border-black hover:bg-[#F3F3F3]'>
                 + Create Transaction
               </button>
             </Link>
+            
           </div>
         </div>
         <div className='flex flex-col w-10/12 shadow-lg'>
@@ -191,8 +238,11 @@ const SalesOrdering1 = () => {
             <div className='flex-1'>P{totalAmount[index]}</div>
             <div className='flex-1'> 
             
+
+          
             {(status[index] == "Delivered") ? (<div>Delivered</div>) : 
             <select value = {status[index]} onChange={(e) => handleInputChange(index, e.target.value)}> 
+            <option value = "Rejected"> Rejected </option>
             {(status[index] == "Pending Approval") ? (<option value="Pending Approval">Pending Approval</option>) : <span></span>}
             {(status[index] == "Approved" || status[index] == "Unpaid" || status[index] == "Pending Approval") ? (<option value="Unpaid">Approved (Unpaid)</option> ) : <span></span>}
             {(status[index] == "Approved" || status[index] == "Unpaid" || status[index] == "Pending Approval") ? (<option value="Approved">Approved (Paid)</option> ) : <span></span>}
@@ -201,23 +251,24 @@ const SalesOrdering1 = () => {
           </select>
            }
             </div>
-          </div>)
+          </div>) 
             })}
 
-            <button onClick = {handleStatus} className = "absolute bottom-0 w-full text-xl p-4 delay-30 w-10/12 bg-[#3BC4AF] h-[60px] text-white rounded-sm"> Save Changes</button>
 
+<button onClick = {handleStatus} className = "bottom-0 w-full text-xl p-4 delay-30 w-10/12 bg-[#3BC4AF] h-[60px] text-white rounded-sm"> Save Changes</button>
 
             
             {/* Add similar rows for other sales entries */}
           </div>
+          
         </div>
       </div>
 
 
       {isModalOpen && (
-        <div style={modalStyles.modalContainer}>
-          <div style={modalStyles.modal}>
-            <div style={modalStyles.modalContent}>
+        <div style={modalStyles.modalContainer} className = "overflow-auto">
+          <div style={modalStyles.modal} className = "overflow-auto">
+            <div style={modalStyles.modalContent} className = "overflow-auto">
               <div className="text-center text-xl font-bold mb-9">Order Details</div>
               <div className="flex flex-col gap-6" style={{ justifyContent: 'flex-end' }}>
                 {/* Add input fields for editing */}
@@ -240,6 +291,11 @@ const SalesOrdering1 = () => {
                   
                   </div>
                 )})}
+
+              <h2 className = "text-center">PROOF OF PAYMENT </h2>
+                {(orderReceipt != null) ? 
+                (<div className = "self-center mt-[-20px]" ><img  width = "350" height = "100" src = {require(`${orderReceipt}`)} alt = "myimage1"></img></div>): <span> No Receipt Found</span>}
+
                 
                 
                 {/* Add more input fields for editing */}

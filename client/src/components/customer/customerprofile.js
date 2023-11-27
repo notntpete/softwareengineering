@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
-import CustomerSidebar from '../sidebarcust';
+import Sidebar from '../sidebar';
 import { Icon } from '@iconify/react';
 
 
@@ -34,7 +34,7 @@ const modalStyles = {
 };
 
 
-function Customer() {
+function CustomerProfile() {
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [editedSalesId, setEditedSalesId] = useState('');
@@ -106,7 +106,7 @@ function Customer() {
 
   return (
     <div className="w-screen min-h-screen flex">
-      <CustomerSidebar />
+      <Sidebar />
 
       <div className="w-screen min-h-screen flex flex-col ml-[375px] items-start">
         <div className="flex flex-row mt-[50px]">
@@ -154,7 +154,7 @@ function Customer() {
             return(
                 <div className="flex flex-row w-full mt-5">
               <div className="flex-[0.1]">
-                <Link to="/customer"><button onClick = {() => openModal(orderID[index])}className="ml-4 mt-1 bg-[#F3F3F3] text-black hover:bg-[#3BC4AF] hover:text-white">
+                <Link to="/customerprofile"><button onClick = {() => openModal(orderID[index])}className="ml-4 mt-1 bg-[#F3F3F3] text-black hover:bg-[#3BC4AF] hover:text-white">
                   <Icon icon="bxs:edit" className="h-5 w-5" />
                 </button></Link>
               </div>
@@ -222,4 +222,4 @@ function Customer() {
   );
 }
 
-export default Customer;
+export default CustomerProfile;
