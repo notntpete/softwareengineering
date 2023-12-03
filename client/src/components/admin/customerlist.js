@@ -35,6 +35,7 @@ const CustomerList = () => {
   const [lastName, setLastName] = useState([]);
   const [firstName, setFirstName] = useState([]);
   const [contactNumber, setContactNumber] = useState([])
+  const [id, setID] = useState([]);
 
   const closeModal = () => {
     setModalOpen(false);
@@ -50,7 +51,7 @@ const CustomerList = () => {
     fetch('http://localhost:4000/customer')
     .then(res => {return res.json()})
     .then(data => {
-        console.log(data);
+        setID(data.map((row) =>  row.customer_id))
         setLastName(data.map((row) => row.last_name))
         setFirstName(data.map((row) => row.first_name));
         setContactNumber(data.map((row) => row.contact_number))
@@ -92,17 +93,19 @@ const CustomerList = () => {
           <div className='flex flex-col bg-white border-[1.5px] rounded-b-sm border-t-0 h-[500px] items-center border-black max-h-3/4 gap-[30px] overflow-y-auto'>
           
           {lastName.map((value, index) => {
-            console.log(lastName);
+            
 
               return(
                 <div className="flex flex-row w-full mt-5">
 
-<button
+                <Link to = "/customerprofile">
+                <button
                 className='ml-4 mt-1 bg-[#F3F3F3] text-black  hover:bg-[#3BC4AF] hover:text-white'
-                //onClick={() => { ; openModal(id[index]) }}
-              >
+                onClick={() => { localStorage.setItem("customerID", id[index])}}
+                >
                 <Icon icon="bxs:edit" className='h-6 w-6' />
               </button>
+              </Link>
               
             <div className="flex-1">{lastName[index]}, {firstName[index]}</div>
             <div className="flex-1">{contactNumber[index]}</div>
