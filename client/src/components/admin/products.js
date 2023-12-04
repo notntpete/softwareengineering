@@ -31,56 +31,6 @@ const modalStyles = {
 };
 
 function Products() {
-
-  
-  const [isEditing, setIsEditing] = useState(false);
-  const [text1, setText1] = useState('');
-  const [text2, setText2] = useState('');
-  const [text3, setText3] = useState('');
-  const [text4, setText4] = useState('');
-
-  const handleEditClick = () => {
-  setIsEditing(true);
-  };
-
-  const handleSaveClick = () => {
-      // Check if the input values are valid numbers
-      if (
-        isNaN(parseFloat(newPrice))
-      ) {
-        alert('Please enter valid numbers for Price.');
-        return;
-      }
-  setIsEditing(false);
-  };
-
-
-
-const handleSubmit = (event) =>{
-  let tester = window.confirm("Try to press")
-  //create confirmation modal of sales order
-  if(tester == true){
-  event.preventDefault();
-  console.log("submitted");
-  const url = 'http://localhost:4000/products';
-  fetch(url, {
-      method: 'POST',
-      headers: {
-      'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({prices: inputValues})
-  })
-  .then(response => response.json())
-  .catch(error => console.error(error))
-  }
-}
-
-const handleInputChange = (index, newValue) => {
-const updatedValues = [...inputValues];
-updatedValues[index] = newValue;
-setInputValues(updatedValues);
-}
-
   const [isModalOpen, setModalOpen] = useState(false);
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
   const [editedBatchId, setEditedBatchId] = useState('');
@@ -129,8 +79,6 @@ setInputValues(updatedValues);
         })
     }, [])
 
-
-    
   const openModal = (batchId, classType, quantity, measurementType, price) => {
     setEditedBatchId(batchId);
     setEditedClassType(classType);
@@ -165,16 +113,10 @@ setInputValues(updatedValues);
           .then(response => response.json())
           .catch(error => console.error(error))
           }
-      if (newName.trim() === '' || newPrice.trim() === '') {
-        alert('Please fill in all fields before saving.');
-        return;
-      };
     setTimeout(() => {
       closeCreateModal();
     }, 2000);
   };
-
-
 
   const handleDelete = (index) => {
       let tester = window.confirm("Are you sure you want to delete this product?")
@@ -212,7 +154,7 @@ setInputValues(updatedValues);
       <div className="w-screen min-h-screen flex flex-col ml-[375px] items-start">
         <div className="flex flex-row mt-[100px]">
           <input
-            className="bg-[#D9D9D9] h-[30px] w-[225px] rounded-tl-sm rounded-bl-sm min-w-[50px] border-[1.5px] border-black placeholder:text-black"
+            className="bg-[#D9D9D9] h-[30px] w-[225px] rounded-tl-sm rounded-bl-sm min-w-[50px] border-[1.5px] border-black placeholder:text-black p-2"
             placeholder=" Search"
           />
           <button className="h-[30px] w-[40px] border-l-0 bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black justify-center items-center px-2 hover:bg-[#F3F3F3]">
@@ -288,7 +230,6 @@ setInputValues(updatedValues);
 
       {/* Modal */}
       {isModalOpen && (
-      <form>
         <div style={modalStyles.modalContainer}>
           <div style={modalStyles.modal}>
             <div style={modalStyles.modalContent}>
@@ -301,7 +242,7 @@ setInputValues(updatedValues);
                       <input
                         value={newName}
                         onChange={(event) => setNewName(event.target.value)}
-                        className="ml-[140px] rounded-lg bg-teal-500 h-6 w-[105px]"
+                        className="ml-[140px] rounded-lg bg-teal-500 h-6 w-[105px] p-2"
                       />
                     </div>
                   </h2>
@@ -311,7 +252,7 @@ setInputValues(updatedValues);
                       <input
                         value={measurementType}
                         onChange={(event) => setMeasurementType(event.target.value)}
-                        className="ml-[60px] rounded-lg bg-teal-500 h-6 w-[105px]"
+                        className="ml-[60px] rounded-lg bg-teal-500 h-6 w-[105px] p-2"
                       />
 
                     </div>
@@ -322,7 +263,7 @@ setInputValues(updatedValues);
                       <input
                         value={newPrice}
                         onChange={(event) => setNewPrice(event.target.value)}
-                        className="ml-[165px] rounded-lg bg-teal-500 h-6 w-[105px]"
+                        className="ml-[165px] rounded-lg bg-teal-500 h-6 w-[105px] p-2"
                       />
                     </div>
                   </h2>
@@ -345,89 +286,46 @@ setInputValues(updatedValues);
             </div>
           </div>
         </div>
-        </form>
       )}
-      
 
 {isCreateModalOpen && (
           <div style={modalStyles.modalContainer}>
             <div style={modalStyles.modal}>
               <div style={modalStyles.modalContent}>
                 <div className="text-center text-xl font-bold mb-9">Create Product</div>
-                {isEditing ? (
-                  <>
-                  <h2 className="flex-1 flex ml-10 m-3">
-                    <b>Product Name: </b>
+                <div className="flex flex-col gap-6" style={{ justifyContent: 'flex-end' }}>
+                  <h2 className="flex-1 flex ml-10">
+                    <b>Product Name </b>
                     <div className="flex-1">
-                    <input
+                      <input
                         value={newName}
-                        onChange={(event) => {
-                            const newName = event.target.value;
-                            if (newName.length <= 15) {
-                              setNewName(newName);
-                            } else {
-                              alert('Name cannot be more than 15 characters.');
-                            }
-                            setNewName(event.target.value)}
-                          }
-                         
-                        className="ml-[5px] rounded-lg bg-gray-200 border-[1.5px] border-black h-6 w-[250px]"
+                        onChange={(event) => setNewName(event.target.value)}
+                        className="ml-[140px] rounded-lg bg-teal-500 h-6 w-[105px] p-2"
                       />
                     </div>
                   </h2>
-                  <h2 className="flex-1 flex ml-10 m-3">
-                  <b>Measurement Type: </b>
-                  <div className="">
-                  <input class="rounded-md bg-[#CCDA7D] ml-10 mr-1" type='radio' value = "kg" name='typeofmeasure' id='kg' checked={selectedValue === 'kg'}
-                  onChange={handleRadioChange}></input>
-                                  <label for='kg'>kg</label> 
-                                  </div>
-                                  <div class="border-[1.5px] border-black bg-gray-200 rounded-md w-12 ml-2 mr-10">
-                                  <input class="rounded-md bg-[#CCDA7D] mr-1" type='radio' value = "box" name='typeofmeasure' id='box' checked={selectedValue === 'box'} onChange={handleRadioChange} ></input>
-                                  <label for='box'>box</label>
-                  </div> 
-                </h2>
-                  <h2 className="flex-1 flex ml-10 m-3">
+                  <h2 className="flex-1 flex ml-10">
+                    <b>Measurement Type: </b>
+                    <div className="">
+                    <input class="rounded-md bg-[#CCDA7D] ml-10 mr-1 p-2" type='radio' value = "kg" name='typeofmeasure' id='kg' checked={selectedValue === 'kg'}
+          onChange={handleRadioChange}></input>
+                                    <label for='kg'>kg</label> 
+                                    </div>
+                                    <div class="bg-teal-500 rounded-md w-12 ml-2 mr-10">
+                                    <input class="rounded-md bg-[#CCDA7D] mr-1" type='radio' value = "box" name='typeofmeasure' id='box' checked={selectedValue === 'box'} onChange={handleRadioChange} ></input>
+                                    <label for='box'>box</label>
+                    </div> 
+                  </h2>
+                  <h2 className="flex-1 flex ml-10">
                     <b>Price: </b>
                     <div className="flex-1">
                       <input
-                        type="number"
                         value={newPrice}
-                        onChange={(e) => {
-                          const newPrice = e.target.value;
-                          if (newPrice.length <= 8) {
-                            setNewPrice(newPrice);
-                          } else {
-                            alert('Price cannot be more than 8 characters.');
-                          }
-                        }}
-                        className="ml-[5px] rounded-lg bg-gray-200 border-[1.5px] border-black h-6 w-[250px]"
+                        onChange={(event) => setNewPrice(event.target.value)}
+                        className="ml-[165px] rounded-lg bg-teal-500 h-6 w-[105px] p-2"
                       />
                     </div>
-                  </h2>     
-                  </>
-                  ) : (
-                    <>
-                    <div className="flex m-3">
-                          <b class="ml-7">Product Name:  </b>
-                          <p class="ml-[10px]">{newName}</p>
-                    </div>
-                        
-                    <div className="flex m-3">
-                          <b class="ml-7">Measurement Type:</b>
-                          <p class="ml-[10px]">{selectedValue}</p>
-                    </div>
-                    <div className="flex m-3">
-                          <b class="ml-7">Price:  </b>
-                          <p class="ml-[10px]">{newPrice}</p>
-                    </div>
-                        
-                    </>
-                  )}
-                </div>
-                <button onClick={handleEditClick} className="ml-[20px] delay-150 bg-[#D9D9D9] w-[75px] rounded-tr-sm rounded-br-sm border-[1.5px] mb-5 border-black hover:bg-[#F3F3F3]">Edit</button>
-                <button onClick={handleSaveClick} className="ml-[10px] delay-150 bg-[#D9D9D9] w-[75px] rounded-tr-sm rounded-br-sm border-[1.5px] mb-5 border-black hover:bg-[#F3F3F3]">Save</button>
-                  <form>
+                  </h2>
                   <div className="flex flex-col items-center gap-6">
                     <button
                       onClick={handleCreate}
@@ -442,9 +340,10 @@ setInputValues(updatedValues);
                       Close
                     </button>
                   </div>
-                  </form>
                 </div>
               </div>
+            </div>
+          </div>
         )}
     </div>
   );

@@ -180,7 +180,7 @@ function SalesTransaction(){
                         <div className='flex-1'>{remainingQuantity[index]}</div>
                         <div className='flex-1'> P{productPrice[index]}/{measure[index]}</div>
                         <div className='flex-1'><input
-                          class = "rounded-md text-center bg-[#3BC4AF] w-32"
+                          class = "rounded-md text-center bg-[#3BC4AF] w-32 p-2"
                           key={index}
                           type="text"
                           value={inputValues[index]}

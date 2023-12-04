@@ -149,8 +149,6 @@ function AdminSalesTransaction(){
               <div className='flex-1'>Available</div>
               <div className = 'flex-1'> Price </div>
               <div className='flex-1'>Quantity</div>
-              
-
             </div>
 
             <div className='flex flex-col bg-white border-[1.5px] rounded-b-sm border-t-0 h-[500px] items-center border-black max-h-3/4 gap-[30px] overflow-y-auto'>
@@ -200,7 +198,7 @@ function AdminSalesTransaction(){
                                 <input
                                   value={productName}
                                   onChange={(event) => setProductName(event.target.value)}
-                                  className="rounded-lg bg-teal-500 h-6 w-[105px]"
+                                  className=" p-2 rounded-lg bg-teal-500 h-6 w-[105px]"
                                 />
                               </div>
                             </h2>

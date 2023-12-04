@@ -37,11 +37,11 @@ const RegisterEmployee = () => {
 
                   </div>
                 <div className='flex flex-col  w-2/3 items-start gap-4 mt-10'>
-                  <input class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
-                  <input class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
-                  <input class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
-                  <input class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='number' placeholder='' ></input>
-                  <input class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
+                  <input class=" rounded-md bg-[#CCDA7D] h-6 w-[375px]  p-2" type='text' placeholder='' ></input>
+                  <input class=" rounded-md bg-[#CCDA7D] h-6 w-[375px]  p-2" type='text' placeholder='' ></input>
+                  <input class=" rounded-md bg-[#CCDA7D] h-6 w-[375px]  p-2" type='text' placeholder='' ></input>
+                  <input class=" rounded-md bg-[#CCDA7D] h-6 w-[375px]  p-2" type='number' placeholder='' ></input>
+                  <input class=" rounded-md bg-[#CCDA7D] h-6 w-[375px]  p-2" type='text' placeholder='' ></input>
                   <div class="flex flex-row gap-4">
                     <div class="bg-[#CCDA7D] rounded-md w-20 justify-start">
                       <input class="rounded-md bg-[#CCDA7D] mr-1" type='radio' name='gender' id='male'></input>

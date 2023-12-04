@@ -41,8 +41,8 @@ function Sacks(){
 
 
             <form onSubmit = {handleSubmit}>
-            <div> Input Sacks  <input value = {sacks} onChange = {handleInputChangeSack} class="rounded-lg bg-teal-500 h-6 m-2 w-[80px] ml-8"></input></div>
-            <div> Date </div> <input value = {date} onChange = {handleInputChangeDate}type = "date"></input>
+            <div> Input Sacks  <input value = {sacks} onChange = {handleInputChangeSack} class="rounded-lg bg-teal-500 h-6 m-2 w-[80px] ml-8 p-2"></input></div>
+            <div> Date </div> <input value = {date} onChange = {handleInputChangeDate}type = "date" class="p-2"></input>
             <button> Submit </button>
             </form>
 
