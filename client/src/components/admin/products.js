@@ -300,7 +300,7 @@ function Products() {
                       <input
                         value={newName}
                         onChange={(event) => setNewName(event.target.value)}
-                        className="ml-[140px] rounded-lg bg-teal-500 h-6 w-[105px]"
+                        className="ml-[140px] rounded-lg bg-teal-500 h-6 w-[105px] p-2"
                       />
                     </div>
                   </h2>
