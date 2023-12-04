@@ -95,7 +95,7 @@ return(
             <div class="ml-[350px] bg-white m-[50px] h-[600px] w-[600px] rounded-lg mt-[25px]">
                 <h1 class="text-center  p-3 mt-5 bg-white"><b>SALES ORDER <div class="mt-[20px] rounded-lg bg-emerald-400 h-[1px]"></div></b></h1>
                 <h1 class="">Customer Name:
-                    <div class=""><input class="text-black rounded-lg bg-teal-500 h-[20px] w-[550px]"></input></div>
+                    <div class=""><input class="text-black rounded-lg bg-teal-500 h-[20px] w-[550px] p-2"></input></div>
                 </h1>
             
                 <div class="pl-5 rounded-lg bg-white m-5 h-[350px] p-6">
@@ -120,7 +120,7 @@ return(
                       {resetArrayToZero}
                       {inputValues.map((value, index) => (
                       <input
-                      class = "rounded-md text-center bg-lime-700 w-32"
+                      class = "rounded-md text-center bg-lime-700 w-32 p-2"
                       key={index}
                       type="text"
                       value={value}

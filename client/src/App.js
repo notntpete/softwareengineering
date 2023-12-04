@@ -10,9 +10,7 @@ import RegisterCustomer from './components/regcus';
 import Orders from './components/orders'
 import RegisterEmployee from './components/regemp';
 import Repack from './components/repack';
-import LandingPage from './components/landingpage';
 import LoginCustomer from './components/logincus';
-import LoginEmployee from './components/loginemp';
 import CustomerList from './components/admin/customerlist';
 import AdminSalesTransaction from './components/admin/adminsalestransaction'
 import SacksInventory from './components/SacksInventory';
@@ -21,7 +19,8 @@ import Customer from './components/customer/customer';
 import VerifyCustomer from './components/admin/verifycustomer'
 import ImageUploader from './components/admin/imageupload';
 import CustomerProfile from './components/customer/customerprofile'
-
+import EmployeeList from './components/admin/employeelist';
+import SalesReport from './components/salesreport';
 
 import { MyContextProvider } from './components/MyContext';
 
@@ -71,9 +70,7 @@ function App() {
       <Route path = "/registercust" element = {<RegisterCustomer></RegisterCustomer>}></Route>
       <Route path = "/registeremp" element = {<RegisterEmployee></RegisterEmployee>}></Route>
       <Route path = "/repack" element = {<Repack></Repack>}></Route>
-      <Route path = "" element = {<LandingPage></LandingPage>}></Route>
-      <Route path='/logincus' element={<LoginCustomer></LoginCustomer>}></Route>
-      <Route path='/loginemp' element={<LoginEmployee></LoginEmployee>}></Route>
+      <Route path='' element={<LoginCustomer></LoginCustomer>}></Route>
       <Route path='/regcus' element={<RegisterCustomer></RegisterCustomer>}></Route>
       <Route path='/regemp' element={<RegisterEmployee></RegisterEmployee>}></Route>
       <Route path='/customerlist' element={<CustomerList></CustomerList>}></Route>
@@ -85,7 +82,8 @@ function App() {
       <Route path = '/verifycustomers' element = {<VerifyCustomer></VerifyCustomer>}></Route>
       <Route path = '/image' element = {<ImageUploader></ImageUploader>}></Route>
       <Route path = '/customerprofile' element = {<CustomerProfile></CustomerProfile>}></Route>
-
+      <Route path = '/employeelist' element = {<EmployeeList></EmployeeList>}></Route>
+      <Route path = '/salesreport' element = {<SalesReport></SalesReport>}></Route>
 
     </Routes>
     
