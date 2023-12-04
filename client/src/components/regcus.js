@@ -94,33 +94,33 @@ const RegisterCustomer = () => {
                   </div>
                 <div className='flex flex-col  w-2/3 items-start gap-4 mt-10'>
 
-                  <input value = {username} onChange = {handleInputUsername}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
-                  <input value = {password} onChange = {handleInputPassword}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
+                  <input value = {username} onChange = {handleInputUsername}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] p-2 " type='text' placeholder='' ></input>
+                  <input value = {password} onChange = {handleInputPassword}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] p-2 " type='text' placeholder='' ></input>
                   <br></br>
 
-                  <input value = {lastName} onChange = {handleInputLast}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
-                  <input value = {firstName} onChange = {handleInputFirst}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
+                  <input value = {lastName} onChange = {handleInputLast}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px]  p-2" type='text' placeholder='' ></input>
+                  <input value = {firstName} onChange = {handleInputFirst}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px]  p-2" type='text' placeholder='' ></input>
 
 
                   <div class="flex flex-row gap-4">
                     <div class="bg-[#CCDA7D] rounded-md w-20 justify-start">
-                      <input class="rounded-md bg-[#CCDA7D] mr-1" type='radio' name='gender' id='male'></input>
+                      <input class="rounded-md bg-[#CCDA7D] mr-1 p-2" type='radio' name='gender' id='male'></input>
                       <label for='male'>Male</label>
                     </div>
                     <div class="bg-[#CCDA7D] rounded-md w-20 justify-start">
-                      <input class="rounded-md bg-[#CCDA7D] mr-1" type='radio' name='gender' id='female'></input>
+                      <input class="rounded-md bg-[#CCDA7D] mr-1 p-2" type='radio' name='gender' id='female'></input>
                       <label for='female'>Female</label>
                     </div>
                     <div class="bg-[#CCDA7D] rounded-md w-20 justify-start">
-                      <input class="rounded-md bg-[#CCDA7D] mr-1" type='radio' name='gender' id='male'></input>
+                      <input class="rounded-md bg-[#CCDA7D] mr-1 p-2" type='radio' name='gender' id='male'></input>
                       <label for='others'>Others</label>
                     </div>
                   </div>
 
-                  <input value = {phoneNumber} onChange = {handleInputPhoneNumber} class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
-                  <input value = {fax} onChange = {handleInputFax}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
-                  <input value = {billAddress} onChange = {handleInputBillAddress}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
-                  <input value = {shipAddress} onChange = {handleInputShipAddress} class=" rounded-md bg-[#CCDA7D] h-6 w-[375px] " type='text' placeholder='' ></input>
+                  <input value = {phoneNumber} onChange = {handleInputPhoneNumber} class=" rounded-md bg-[#CCDA7D] h-6 w-[375px]  p-2" type='text' placeholder='' ></input>
+                  <input value = {fax} onChange = {handleInputFax}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px]  p-2" type='text' placeholder='' ></input>
+                  <input value = {billAddress} onChange = {handleInputBillAddress}class=" rounded-md bg-[#CCDA7D] h-6 w-[375px]  p-2" type='text' placeholder='' ></input>
+                  <input value = {shipAddress} onChange = {handleInputShipAddress} class=" rounded-md bg-[#CCDA7D] h-6 w-[375px]  p-2" type='text' placeholder='' ></input>
 
                   
         

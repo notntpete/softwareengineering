@@ -111,10 +111,10 @@ function CustomerProfile() {
       <div className="w-screen min-h-screen flex flex-col ml-[375px] items-start">
         <div className="flex flex-row mt-[50px]">
           <input
-            className="bg-[#D9D9D9] h-[30px] w-[225px] rounded-tl-sm rounded-bl-sm min-w-[50px] border-[1.5px] border-black placeholder:text-black"
+            className="bg-[#D9D9D9] h-[30px] w-[225px] rounded-tl-sm rounded-bl-sm min-w-[50px] border-[1.5px] border-black placeholder:text-black p-2"
             placeholder=" Search"
           ></input>
-          <button className="h-[30px] w-[40px] border-l-0 bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black justify-center items-center px-2 hover:bg-[#F3F3F3]">
+          <button className="h-[30px] w-[40px] border-l-0 bg-[#D9D9D9] rounded-tr-sm rounded-br-sm border-[1.5px] border-black justify-center items-center px-2 hover:bg-[#F3F3F3] p-2">
             <Icon icon="carbon:search" className="h-5 w-5" />
           </button>
         </div>

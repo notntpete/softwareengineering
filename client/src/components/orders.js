@@ -173,7 +173,7 @@ function Orders() {
         <input type="radio" value="box"/>box </label>
         </div>
         </h2>
-         <h2 className='flex-1 flex mx-10'> <b className='flex-1'>Price: </b> <div className='flex-1'><input className="ml-6 rounded-lg bg-teal-500 h-6 w-[105px]"></input> </div>
+         <h2 className='flex-1 flex mx-10'> <b className='flex-1'>Price: </b> <div className='flex-1'><input className="ml-6 rounded-lg bg-teal-500 h-6 w-[105px] p-2"></input> </div>
         </h2>
         <button  className="delay-150 bg-white border-emerald-500 border-2 place-content-center ml-[250px] p-1 h-9 w-[80px] rounded-lg">Submit</button>
         <button onClick={closeModal} className="delay-150 bg-white border-emerald-500 border-2 place-content-center ml-[250px] p-1 h-9 w-[80px] rounded-lg">Close</button>
